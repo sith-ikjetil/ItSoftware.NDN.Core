@@ -812,7 +812,7 @@ namespace ItSoftware.Core.Extensions
 		}
 		#endregion
 
-		#region ItsHashXXX
+		#region ItsHashXxx
 		/// <summary>
 		/// Hash to MD5.
 		/// </summary>
@@ -988,7 +988,7 @@ namespace ItSoftware.Core.Extensions
 		}
 		#endregion
 
-		#region ItsGetStopwatch
+		#region ItsGetStopwatchXxxSeconds
 		public static long ItsGetStopWatchNanoSeconds(this Stopwatch s)
 		{
 			long frequency = Stopwatch.Frequency;
