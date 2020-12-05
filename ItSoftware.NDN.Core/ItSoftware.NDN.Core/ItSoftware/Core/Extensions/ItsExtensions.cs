@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Collections;
+using System.Diagnostics;
 
 namespace ItSoftware.Core.Extensions
 {
@@ -984,6 +985,27 @@ namespace ItSoftware.Core.Extensions
 			}
 
 			return result.ToArray();
+		}
+		#endregion
+
+		#region ItsGetStopwatch
+		public static long ItsGetStopWatchNanoSeconds(this Stopwatch s)
+		{
+			long frequency = Stopwatch.Frequency;
+			long nanosecPerTick = (1000L * 1000L * 1000L) / frequency;
+			return s.ElapsedTicks * nanosecPerTick;
+		}
+		public static long ItsGetStopWatchMicroSeconds(this Stopwatch s)
+		{
+			long frequency = Stopwatch.Frequency;
+			long nanosecPerTick = (1000L * 1000L * 1000L) / frequency;
+			return s.ElapsedTicks * nanosecPerTick / 1_000L;
+		}
+		public static long ItsGetStopWatchMilliSeconds(this Stopwatch s)
+		{
+			long frequency = Stopwatch.Frequency;
+			long nanosecPerTick = (1000L * 1000L * 1000L) / frequency;
+			return s.ElapsedTicks * nanosecPerTick / 1_000_000L;
 		}
 		#endregion
 	}// class
