@@ -10,9 +10,57 @@ using System.Threading.Tasks;
 
 namespace ItSoftware.Core.HttpHost
 {
-
-	public class ItsMiddleware
+	public class ItsMiddlewareEx
 	{
+		internal List<ItsMiddleware> List { get; set; }
+		public ItsMiddlewareEx(List<ItsMiddleware> list)
+		{
+			if ( list == null )
+			{
+				throw new ArgumentNullException("list");
+			}
+
+			if ( list.Count < 1 )
+			{
+				throw new ArgumentOutOfRangeException("list");
+			}
+
+			this.List = list;
+		}
+
+		internal RequestDelegate Middleware(RequestDelegate nextMiddleware)
+		{
+			RequestDelegate appFunc =
+			async(HttpContext context) =>
+			{
+				var environment = new OwinEnvironment(context);
+				var features = new OwinFeatureCollection(environment);
+
+				if ( !features.Environment.ContainsKey( "its.SessionState" ) )
+				{
+					var state = new Dictionary<string, object>( );
+					features.Environment["its.SessionState"] = state;
+				}
+
+				this.InvokeAt(context, 0);
+			};
+			return appFunc;
+		}
+
+		internal async void InvokeAt(HttpContext context, int i)
+		{
+			if (i >= this.List.Count )
+			{
+				return;
+			}
+
+			await this.List[i].InvokeDown(context);
+
+			this.InvokeAt(context, i + 1);
+
+			await this.List[i].InvokeUp(context);
+		}
+
 		protected IDictionary<string,object> SessionState(OwinFeatureCollection context)
 		{
 			if ( context.Environment.ContainsKey( "its.SessionState" ) )

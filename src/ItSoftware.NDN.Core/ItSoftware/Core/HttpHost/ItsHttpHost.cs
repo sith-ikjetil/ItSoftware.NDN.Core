@@ -1,4 +1,6 @@
-﻿/*using Microsoft.Owin.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ItSoftware.Core.HttpHost
 {
-	using AppFunc = Func<IDictionary<string, object>, Task>;
+	using AppFunc = Func<HttpContext,IDictionary<string, object>, Task>;
 
 	public enum ItsHttpHostStatus
 	{
@@ -19,6 +21,7 @@ namespace ItSoftware.Core.HttpHost
 	public class ItsHttpHost : IDisposable
 	{		
 		private IDisposable m_pIDisposableWebApp;
+		private IWebHost m_pIWebHost;
 		public int Port { get; private set; } = 5000;
 		public ItsHttpHostStatus Status { get; private set; } = ItsHttpHostStatus.Inactive;
 
@@ -44,15 +47,14 @@ namespace ItSoftware.Core.HttpHost
 				throw new ObjectDisposedException( "ItsHttpHost" );
 			}			
 
-			this.m_pIDisposableWebApp = WebApp.Start( $"http://localhost:{this.Port}", (app) => 
-			{				
-				foreach ( var m in list )
-				{
-					var middleware = new Func<AppFunc, AppFunc>( m.Middleware );
-					app.Use( middleware );
-				}
+			this.m_pIWebHost = Microsoft.AspNetCore.WebHost.StartWith( $"http://localhost:{this.Port}", (app) => 
+			{
+				ItsMiddlewareEx im = new ItsMiddlewareEx(list);
+				var middleware = new Func<RequestDelegate, RequestDelegate>(im.Middleware);
+				app.Use(middleware);
 			} );
-
+			this.m_pIDisposableWebApp = this.m_pIWebHost as IDisposable;
+			
 			this.Status = ItsHttpHostStatus.Running;
 		}
 
@@ -87,4 +89,3 @@ namespace ItSoftware.Core.HttpHost
 		#endregion
 	}
 }
-*/

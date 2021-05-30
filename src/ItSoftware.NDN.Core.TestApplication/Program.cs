@@ -7,6 +7,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using ItSoftware.Core.Azure;
+using ItSoftware.Core.HttpHost;
 
 namespace ItSoftware.NDN.Core.TestApplication
 {
@@ -47,12 +49,12 @@ namespace ItSoftware.NDN.Core.TestApplication
 			//ItsLog log = new ItsLog( "D:\\ConductorTestSettings.xml", "TEST", true );
 			//log.LogInformation( "Title", "Text" );
 			//return;
-			/*using ( ItsHttpHost host = new ItsHttpHost( 5454 ) )
+			using ( ItsHttpHost host = new ItsHttpHost( 5454 ) )
 			{
 				host.Start( new List<ItsMiddleware> { new Middleware1( ), new Middleware2( ) } );
-				Console.WriteLine( "Server Ready..Press Any Key to Exit..." );
+				Console.WriteLine( "Server Ready at 5454, ..Press Any Key to Exit..." );
 				Console.ReadKey( );
-			}*/
+			}
 			//using (ItsDbClient dbClient = new ItsDbClient("data source=(local);initial catalog=birken;integrated security=True;MultipleActiveResultSets=True;", true))//ItsDbClient.DefaultConnectionString, true))
 			/*using (ItsDbClient dbClient = new ItsDbClient(ItsDbClient.ActiveConnectionString, true))
 			{
