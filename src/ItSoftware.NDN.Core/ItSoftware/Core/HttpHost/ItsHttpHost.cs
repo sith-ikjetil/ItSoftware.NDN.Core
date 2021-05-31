@@ -34,7 +34,7 @@ namespace ItSoftware.Core.HttpHost
 		{
 			if ( list == null )
 			{
-				throw new ArgumentNullException( "list" );
+				throw new ArgumentNullException( nameof(list) );
 			}
 			
 			if ( list.Count == 0 )
@@ -49,7 +49,7 @@ namespace ItSoftware.Core.HttpHost
 
 			this.m_pIWebHost = Microsoft.AspNetCore.WebHost.StartWith( $"http://localhost:{this.Port}", (app) => 
 			{
-				ItsMiddlewareEx im = new ItsMiddlewareEx(list);
+				ItsMiddlewareHost im = new ItsMiddlewareHost(list);
 				var middleware = new Func<RequestDelegate, RequestDelegate>(im.Middleware);
 				app.Use(middleware);
 			} );
