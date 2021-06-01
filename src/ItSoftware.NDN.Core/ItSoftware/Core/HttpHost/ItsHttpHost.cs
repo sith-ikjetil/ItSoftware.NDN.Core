@@ -47,7 +47,7 @@ namespace ItSoftware.Core.HttpHost
 				throw new ObjectDisposedException( "ItsHttpHost" );
 			}			
 
-			this.m_pIWebHost = Microsoft.AspNetCore.WebHost.StartWith( $"http://localhost:{this.Port}", (app) => 
+			this.m_pIWebHost = Microsoft.AspNetCore.WebHost.StartWith( $"http://{System.Net.IPAddress.Loopback}:{this.Port}", (app) => 
 			{
 				ItsMiddlewareHost im = new ItsMiddlewareHost(list);
 				var middleware = new Func<RequestDelegate, RequestDelegate>(im.Middleware);
