@@ -219,6 +219,16 @@ namespace ItSoftware.Core.Log
 				this.SaveLog( );
 			}
 		}
+
+		public override string ToString()
+		{
+			StringBuilder txt = new StringBuilder();
+			foreach ( var i in this.Entries )
+			{
+				txt.AppendLine($"{Enum.GetName(typeof(ItsLogType),i.Type)} : {i.When.ToString("s")} : {i.Title.Replace(":",",")} : {i.Text.Replace(":",",")}");
+			}
+			return txt.ToString();
+		}
 		#endregion
 	}
 }
