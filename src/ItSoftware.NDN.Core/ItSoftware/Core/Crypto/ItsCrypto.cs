@@ -29,7 +29,7 @@ namespace ItSoftware.Core.Crypto
 		/// <returns></returns>
 		public static byte[] Encrypt(byte[] source, string key)
 		{
-			AesManaged aes = null;
+			Aes aes = null;
 			MemoryStream memoryStream = null;
 			CryptoStream cryptoStream = null;
 
@@ -41,7 +41,7 @@ namespace ItSoftware.Core.Crypto
 				Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(key, Encoding.UTF8.GetBytes(ItsCrypto.EncryptionSalt), 1000);
 
 				//Create AES algorithm
-				aes = new AesManaged();
+				aes = Aes.Create();
 				//Key derived from byte array with 32 pseudo-random key bytes
 				aes.Key = rfc2898.GetBytes(32);
 				//IV derived from byte array with 16 pseudo-random key bytes
@@ -119,7 +119,7 @@ namespace ItSoftware.Core.Crypto
 		/// <returns></returns>
 		public static byte[] Decrypt(byte[] source, string key)
 		{
-			AesManaged aes = null;
+			Aes aes = null;
 			MemoryStream memoryStream = null;
 
 			try
@@ -130,7 +130,7 @@ namespace ItSoftware.Core.Crypto
 				Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(key, Encoding.UTF8.GetBytes(ItsCrypto.EncryptionSalt), 1000);
 
 				//Create AES algorithm
-				aes = new AesManaged();
+				aes = Aes.Create();
 				//Key derived from byte array with 32 pseudo-random key bytes
 				aes.Key = rfc2898.GetBytes(32);
 				//IV derived from byte array with 16 pseudo-random key bytes

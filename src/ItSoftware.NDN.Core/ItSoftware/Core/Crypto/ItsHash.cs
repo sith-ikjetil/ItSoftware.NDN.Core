@@ -17,8 +17,8 @@ namespace ItSoftware.Core.Crypto
 		public static string HashSHA512( string password, Encoding enc )
 		{			
 			byte[] message = enc.GetBytes( password );
-
-			SHA512Managed hashString = new SHA512Managed( );
+			
+			SHA512 hashString = SHA512.Create();
 			byte[] hashValue = hashString.ComputeHash( message );
 
 			StringBuilder sBuilder = new StringBuilder( );
@@ -38,7 +38,7 @@ namespace ItSoftware.Core.Crypto
 		{			
 			byte[] message = enc.GetBytes( password );
 
-			SHA256Managed hashString = new SHA256Managed( );
+			SHA256 hashString = SHA256.Create( );
 			byte[] hashValue = hashString.ComputeHash( message );
 
 			StringBuilder sBuilder = new StringBuilder( );
@@ -58,7 +58,7 @@ namespace ItSoftware.Core.Crypto
 		{			
 			byte[] message = enc.GetBytes( password );
 
-			SHA384Managed hashString = new SHA384Managed( );
+			SHA384 hashString = SHA384.Create( );
 			byte[] hashValue = hashString.ComputeHash( message );
 
 			StringBuilder sBuilder = new StringBuilder( );
@@ -78,7 +78,7 @@ namespace ItSoftware.Core.Crypto
 		{			
 			byte[] message = enc.GetBytes( password );
 
-			SHA1Managed hashString = new SHA1Managed( );
+			SHA1 hashString = SHA1.Create( );
 			byte[] hashValue = hashString.ComputeHash( message );
 
 			StringBuilder sBuilder = new StringBuilder( );			
