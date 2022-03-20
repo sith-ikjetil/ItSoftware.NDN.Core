@@ -1008,5 +1008,22 @@ namespace ItSoftware.Core.Extensions
 			return s.ElapsedTicks * nanosecPerTick / 1_000_000L;
 		}
 		#endregion
+
+		#region ItsRandom
+		public static T ItsRandom<T>(this List<T> list)
+        {
+			if ( list == null )
+            {
+				return default(T);
+            }
+
+			if ( list.Count == 1 )
+            {
+				return list[0];
+            }
+
+			return list[s_rnd.Next(0, list.Count)];
+        }
+		#endregion
 	}// class
 }// namespace

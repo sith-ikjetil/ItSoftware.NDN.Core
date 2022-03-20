@@ -33,6 +33,7 @@ namespace ItSoftware.NDN.Core.TestApplication
 				this.TestItsRenderTimeSpan();
 				this.TestItsRenderException();
 				this.TestItsHttpHost();
+				this.TestItsRandom();
 			}
 			catch (Exception y)
 			{
@@ -247,5 +248,17 @@ namespace ItSoftware.NDN.Core.TestApplication
 
 			Console.WriteLine();
 		}
+
+		private void TestItsRandom()
+        {
+			PrintTestHeader("ItsRandom");
+
+			var list = new List<string>() { "Anne", "Beta", "Bob", "Charlie", "Isabel", "John" };
+
+			for ( int i = 0; i < 10; i++ )
+            {
+				Console.WriteLine(list.ItsRandom());
+            }
+        }
 	}
 }
