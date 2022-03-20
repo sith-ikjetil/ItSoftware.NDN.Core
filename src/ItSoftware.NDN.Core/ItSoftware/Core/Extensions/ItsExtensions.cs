@@ -1010,7 +1010,7 @@ namespace ItSoftware.Core.Extensions
 		#endregion
 
 		#region ItsRandom
-		public static T ItsRandom<T>(this List<T> list)
+		public static T ItsRandom<T>(this ICollection<T> list)
         {
 			if ( list == null )
             {
@@ -1019,10 +1019,10 @@ namespace ItSoftware.Core.Extensions
 
 			if ( list.Count == 1 )
             {
-				return list[0];
+				return list.ElementAt(0);
             }
-
-			return list[s_rnd.Next(0, list.Count)];
+			
+			return list.ElementAt(s_rnd.Next(0, list.Count));
         }
 		#endregion
 	}// class
