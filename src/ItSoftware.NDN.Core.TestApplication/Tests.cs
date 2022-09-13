@@ -96,6 +96,9 @@ namespace ItSoftware.NDN.Core.TestApplication
 			PrintTestHeader("ItsLog");
 
 			ItsLog log = new ItsLog("D:\\ItsLog.xml", "ItSoftware.NDN.Core", false);
+			log.ItemAdded += (sender ,e) => {
+				Console.WriteLine($"ItemAdded: {e.ItemAdded.Type.ToString()}");
+			};
 			log.LogInformation("Information Title", "Information text");
 			log.LogWarning("Warning Title", "Warning text");
 			log.LogError("Error Title", "Error text");
