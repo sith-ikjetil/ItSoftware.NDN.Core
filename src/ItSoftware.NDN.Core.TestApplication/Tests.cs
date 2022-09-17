@@ -23,6 +23,7 @@ namespace ItSoftware.NDN.Core.TestApplication
 
 			try
 			{
+				this.TestNormalizeFileName();
 				this.TestItsRegularExpressions();
 				this.TestItsLog();
 				this.TestItsHash();
@@ -66,6 +67,16 @@ namespace ItSoftware.NDN.Core.TestApplication
 			this.m_swatch.Stop();
 
 			Console.WriteLine($"> Elapsed time: {new TimeSpan(0, 0, 0, 0, (int)this.m_swatch.ItsGetStopWatchMilliSeconds()).ItsRenderTimeSpan(true)}");
+			Console.WriteLine();
+		}
+
+		private void TestNormalizeFileName()
+		{
+			PrintTestHeader("ItsNormalizeFilename");
+
+			string filename = "Th:/?.&$£@.txt";
+			
+			Console.WriteLine($"{filename} becomes {filename.ItsNormalizeFileName()}");
 			Console.WriteLine();
 		}
 

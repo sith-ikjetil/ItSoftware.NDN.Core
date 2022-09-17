@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Collections;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace ItSoftware.Core.Extensions
 {
@@ -1024,6 +1025,20 @@ namespace ItSoftware.Core.Extensions
 			
 			return list.ElementAt(s_rnd.Next(0, list.Count));
         }
+		#endregion
+
+		#region ItsNormalizeFileName
+		public static string ItsNormalizeFileName(this string filename)
+		{
+			var result = filename;
+
+			foreach ( var c in System.IO.Path.GetInvalidFileNameChars() )
+			{
+				result = result.Replace(c, '_');
+			}
+
+			return result;
+		}
 		#endregion
 	}// class
 }// namespace
