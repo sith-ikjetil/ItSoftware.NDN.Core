@@ -105,31 +105,39 @@ namespace ItSoftware.Core.Log
 		/// <param name="filename"></param>
 		public void SaveLog( string filename )
 		{
-			XDocument xd = new XDocument( new XDeclaration( "1.0", "utf-8", null ) );
-
-			XElement xeRoot = new XElement( "Log" );
-			xd.Add( xeRoot );
-			xeRoot.SetAttributeValue("Name", this.EventLogSourceName ?? string.Empty);
-
-			foreach ( var entry in this.Entries )
-			{
-				try
-				{
-					xeRoot.Add( entry.ToXElement( ) );
-				}
-				catch ( System.Exception )
-				{
-
-				}
-			}
-
-			xd.Save( filename );
+			this.ToXDocument().Save( filename );
 		}
-		/// <summary>
-		/// Log information entry.
-		/// </summary>
-		/// <param name="text"></param>
-		public void LogInformation( string title, string text )
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
+        public XDocument ToXDocument()
+        {
+            XDocument xd = new XDocument(new XDeclaration("1.0", "utf-8", null));
+
+            XElement xeRoot = new XElement("Log");
+            xd.Add(xeRoot);
+            xeRoot.SetAttributeValue("Name", this.EventLogSourceName ?? string.Empty);
+
+            foreach (var entry in this.Entries)
+            {
+                try
+                {
+                    xeRoot.Add(entry.ToXElement());
+                }
+                catch (System.Exception)
+                {
+
+                }
+            }
+
+            return xd;
+        }
+        /// <summary>
+        /// Log information entry.
+        /// </summary>
+        /// <param name="text"></param>
+        public void LogInformation( string title, string text )
 		{
 			if ( !this.DoLogInformation )
             {
