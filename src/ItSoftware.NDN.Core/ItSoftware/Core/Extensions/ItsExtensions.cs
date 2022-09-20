@@ -1030,15 +1030,37 @@ namespace ItSoftware.Core.Extensions
 		#region ItsNormalizeFileName
 		public static string ItsNormalizeFileName(this string filename)
 		{
-			var result = filename;
-
-			foreach ( var c in System.IO.Path.GetInvalidFileNameChars() )
-			{
-				result = result.Replace(c, '_');
-			}
-
-			return result;
+			return filename.ItsNormalizeFileName('_');
 		}
-		#endregion
-	}// class
+        public static string ItsNormalizeFileName(this string filename, char replaceChar)
+        {
+            var result = filename;
+
+            foreach (var c in System.IO.Path.GetInvalidFileNameChars())
+            {
+                result = result.Replace(c, replaceChar);
+            }
+
+            return result;
+        }
+        #endregion
+
+        #region ItsNormalizeDirectoryName
+        public static string ItsNormalizeDirectoryName(this string filename)
+        {
+            return filename.ItsNormalizeDirectoryName('_');
+        }
+        public static string ItsNormalizeDirectoryName(this string filename, char replaceChar)
+        {
+            var result = filename;
+
+            foreach (var c in System.IO.Path.GetInvalidPathChars())
+            {
+                result = result.Replace(c, replaceChar);
+            }
+
+            return result;
+        }
+        #endregion
+    }// class
 }// namespace
