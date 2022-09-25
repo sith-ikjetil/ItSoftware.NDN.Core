@@ -505,67 +505,6 @@ namespace ItSoftware.Core.Extensions
 		}
 		#endregion
 
-		#region ItsTo/FromBase64
-		public static string ItsToBase64(this string source)
-		{
-			if (source == null)
-			{
-				throw new ArgumentNullException("source");
-			}
-
-			if (source.Length == 0)
-			{
-				return string.Empty;
-			}
-
-			byte[] arrayb64 = Encoding.Unicode.GetBytes(source);
-			return Convert.ToBase64String(arrayb64);
-		}
-		public static string ItsToBase64( this byte[] source )
-		{
-			if ( source == null )
-			{
-				throw new ArgumentNullException( "source" );
-			}
-
-			if ( source.Length == 0 )
-			{
-				return string.Empty;
-			}
-			
-			return Convert.ToBase64String( source );
-		}
-
-		public static string ItsFromBase64ToString(this string source)
-		{
-			if (source == null)
-			{
-				throw new ArgumentNullException("source");
-			}
-
-			if (source.Length == 0)
-			{
-				return string.Empty;
-			}
-			byte[] normalBytes = Convert.FromBase64String(source);
-			return Encoding.Unicode.GetString(normalBytes);
-		}
-		public static byte[] ItsFromBase64ToByteArray( this string source )
-		{
-			if ( source == null )
-			{
-				throw new ArgumentNullException( "source" );
-			}
-
-			if ( source.Length == 0 )
-			{
-				return new byte[0];
-			}
-
-			return Convert.FromBase64String( source );			
-		}
-		#endregion
-
 		#region ItsWidthExpand
 		public static string ItsWidthExpand(this string source, int width, char fill, ItsWidthExpandDirection direction)
 		{
