@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿/*using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Owin;
 using System;
@@ -89,3 +89,4 @@ namespace ItSoftware.Core.HttpHost
 		#endregion
 	}
 }
+*/

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿/*using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Owin;
 using Microsoft.AspNetCore.Routing;
 using System;
@@ -95,3 +95,4 @@ namespace ItSoftware.Core.HttpHost
 		}
 	}
 }
+*/
