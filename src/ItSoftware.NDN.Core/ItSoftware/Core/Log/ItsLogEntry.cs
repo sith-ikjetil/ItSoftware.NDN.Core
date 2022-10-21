@@ -10,10 +10,10 @@ namespace ItSoftware.Core.Log
 	public class ItsLogEntry
 	{
 		#region Public Properties
-		public ItsLogType Type { get; set; }
-		public string Title { get; set; }
-		public string Text { get; set; }
-		public DateTime When { get; set; }
+		public ItsLogType Type { get; set; } = ItsLogType.Information;
+		public string Title { get; set; } = null!;
+		public string Text { get; set; } = null!;
+		public DateTime When { get; set; } = DateTime.MinValue;
 		#endregion
 
 		#region Constructors
@@ -30,10 +30,10 @@ namespace ItSoftware.Core.Log
 		/// <param name="xe"></param>
 		public ItsLogEntry( XElement xe )
 		{
-			this.Type = (ItsLogType) Enum.Parse( typeof( ItsLogType ), xe.Attribute( "Type" ).Value, false );
-			this.Title = xe.Attribute( "Title" ).Value;
+			this.Type = (ItsLogType) Enum.Parse( typeof( ItsLogType ), xe.Attribute( "Type" )?.Value ?? ItsLogType.Information.ToString(), false );
+			this.Title = xe.Attribute( "Title" )?.Value ?? String.Empty;
 			this.Text = xe.Value;
-			this.When = DateTime.Parse( xe.Attribute( "When" ).Value );
+			this.When = DateTime.Parse( xe.Attribute( "When" )?.Value ?? DateTime.Now.ToString("s"));
 		}
 		#endregion
 

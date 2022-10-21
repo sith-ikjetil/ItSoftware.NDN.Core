@@ -13,7 +13,7 @@ namespace ItSoftware.Core.Log
 {
 	public class ItsLogEventArgs : EventArgs
 	{
-		public ItsLogEntry ItemAdded { get; set; }
+		public ItsLogEntry ItemAdded { get; set; } = null!;
 	}
 
 	public delegate void ItsLogItemAddedEventHandler(object sender, ItsLogEventArgs e);
@@ -21,7 +21,7 @@ namespace ItSoftware.Core.Log
     public class ItsLog
 	{
 		#region Public Static Properties
-		public static ItsLog ApplicationLog { get; set; }
+		public static ItsLog ApplicationLog { get; set; } = null!;
 		#endregion
 
 		#region Public Properties
@@ -38,7 +38,7 @@ namespace ItSoftware.Core.Log
 		#endregion
 
 		#region Public Events
-		public event ItsLogItemAddedEventHandler ItemAdded;
+		public event ItsLogItemAddedEventHandler? ItemAdded;
         #endregion
 
         #region Constructors
@@ -81,7 +81,7 @@ namespace ItSoftware.Core.Log
 			{
 				XDocument xd = XDocument.Load( filename );
 
-				foreach ( var element in xd.Root.Elements( "LogEntry" ) )
+				foreach ( var element in xd.Root?.Elements( "LogEntry" ) ?? Enumerable.Empty<XElement>())
 				{
 					this.Entries.Add( new ItsLogEntry( element ) );
 				}
@@ -156,12 +156,8 @@ namespace ItSoftware.Core.Log
 				this.SaveLog( );
 			}
 
-			var handler = this.ItemAdded;
-			if  (handler != null )
-			{
-				handler(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
-			}
-		}
+            this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
+        }
 		/// <summary>
 		/// Log warning entry.
 		/// </summary>
@@ -185,11 +181,7 @@ namespace ItSoftware.Core.Log
 				this.SaveLog( );
 			}
 
-            var handler = this.ItemAdded;
-            if (handler != null)
-            {
-                handler(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
-            }
+            this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
         }
 		/// <summary>
 		/// Log error entry.
@@ -214,11 +206,7 @@ namespace ItSoftware.Core.Log
 				this.SaveLog( );
 			}
 
-            var handler = this.ItemAdded;
-            if (handler != null)
-            {
-                handler(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
-            }
+            this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
         }
 		/// <summary>
 		/// Log debug entry.
@@ -238,11 +226,7 @@ namespace ItSoftware.Core.Log
 				this.SaveLog( );
 			}
 
-            var handler = this.ItemAdded;
-            if (handler != null)
-            {
-                handler(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
-            }
+            this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
         }
 		/// <summary>
 		/// Log other entry.
@@ -262,11 +246,7 @@ namespace ItSoftware.Core.Log
 				this.SaveLog( );
 			}
 
-            var handler = this.ItemAdded;
-            if (handler != null)
-            {
-                handler(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
-            }
+            this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
         }
 
 		public override string ToString()

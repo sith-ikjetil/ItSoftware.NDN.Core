@@ -152,6 +152,6 @@ namespace ItSoftware.Core.Exception
 
         public string FullName { get; set; } = string.Empty;
         public string Header { get; set; } = string.Empty;
-        public ItsExceptionRenderPropertyExtension[] Properties { get; set; }
+        public ItsExceptionRenderPropertyExtension[] Properties { get; set; } = null!;
     }
 }

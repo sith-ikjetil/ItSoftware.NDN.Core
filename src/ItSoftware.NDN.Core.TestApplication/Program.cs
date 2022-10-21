@@ -8,7 +8,7 @@ using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using ItSoftware.Core.Log;
-using ItSoftware.Core.HttpHost;
+//using ItSoftware.Core.HttpHost;
 
 namespace ItSoftware.NDN.Core.TestApplication
 {

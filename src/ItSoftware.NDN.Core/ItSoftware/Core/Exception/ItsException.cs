@@ -42,7 +42,7 @@ namespace ItSoftware.Core.Exception
 
 		public ItsException(SerializationInfo info, StreamingContext context)
 		{
-			this.m_args = (TItsExceptionArgs)info.GetValue(c_args, typeof(TItsExceptionArgs));
+			this.m_args = (TItsExceptionArgs)info.GetValue(c_args, typeof(TItsExceptionArgs))!;
 		}
 
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
@@ -80,12 +80,12 @@ namespace ItSoftware.Core.Exception
 
 		private void AppendInnerExceptions(StringBuilder tos)
 		{
-			EException inner = this.InnerException;
+			EException inner = this.InnerException!;
 			while (inner != null )
 			{
 				tos.AppendLine("## INNER EXCEPTION ##");
 				tos.AppendLine(inner.ToString());
-				inner = inner.InnerException;
+				inner = inner.InnerException!;
 			}
 		}
 	}

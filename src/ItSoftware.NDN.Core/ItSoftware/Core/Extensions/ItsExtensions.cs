@@ -138,7 +138,7 @@ namespace ItSoftware.Core.Extensions
 				msg.AppendLine(y.Message);
 				msg.AppendLine();
 
-				y = y.InnerException;
+				y = y.InnerException!;
 			} while (y != null);
 
 			return msg.ToString();
@@ -866,7 +866,7 @@ namespace ItSoftware.Core.Extensions
 			var result = new List<string>();
 			foreach (Match m in match)
 			{
-				string tmp = m.Groups[groupId]?.Value ?? null;
+				string tmp = m.Groups[groupId]?.Value ?? null!;
 				if (!string.IsNullOrEmpty(tmp))
 				{
 					result.Add(tmp);
@@ -917,7 +917,7 @@ namespace ItSoftware.Core.Extensions
 			var result = new List<string>();
 			foreach (Match m in match)
 			{
-				string tmp = m.Groups[groupId]?.Value ?? null;
+				string tmp = m.Groups[groupId]?.Value ?? null!;
 				if (!string.IsNullOrEmpty(tmp))
 				{
 					result.Add(tmp);
@@ -954,7 +954,7 @@ namespace ItSoftware.Core.Extensions
         {
 			if ( list == null )
             {
-				return default(T);
+				return default(T)!;
             }
 
 			if ( list.Count == 1 )

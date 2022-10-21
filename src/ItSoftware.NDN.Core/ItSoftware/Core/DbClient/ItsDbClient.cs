@@ -17,8 +17,8 @@ namespace ItSoftware.Core.DbClient
 	{
 		#region Private Member Fields
 		private bool m_isDisposed = false;		
-		private SqlConnection m_sqlConnection;
-		private SqlTransaction m_sqlTransaction;		
+		private SqlConnection m_sqlConnection = null!;
+		private SqlTransaction m_sqlTransaction = null!;		
 		#endregion
 
 		#region Private Static Fields
@@ -39,7 +39,7 @@ namespace ItSoftware.Core.DbClient
 					return ItsDbClient.m_activeConnectionString;
 				}
 
-				string acs = ConfigurationManager.AppSettings["ActiveConnectionString"];
+				string acs = ConfigurationManager.AppSettings["ActiveConnectionString"] ?? string.Empty;
 				if (string.IsNullOrEmpty(acs))
 				{
 					throw new ItsException<ItsDbClientExceptionArgs>(string.Format("No ActiveConnectionString settings in web.config's appSettings section."));
@@ -72,7 +72,7 @@ namespace ItSoftware.Core.DbClient
 			 */
 			if (ConfigurationManager.AppSettings["CommandTimeout"] != null)
 			{
-				ItsDbClient.s_commandTimeout = int.Parse(ConfigurationManager.AppSettings["CommandTimeout"]);
+				ItsDbClient.s_commandTimeout = int.Parse(ConfigurationManager.AppSettings["CommandTimeout"]!);
 			}
 
 		}
@@ -196,7 +196,7 @@ namespace ItSoftware.Core.DbClient
 				throw new ItsException<ItsDbClientExceptionArgs>("Not in a transaction");
 			}
 			m_sqlTransaction.Commit();
-			m_sqlTransaction = null;
+			m_sqlTransaction = null!;
 		}
 		/// <summary>
 		/// Rollback
@@ -213,7 +213,7 @@ namespace ItSoftware.Core.DbClient
 				throw new ItsException<ItsDbClientExceptionArgs>("Not in a transaction");
 			}
 			m_sqlTransaction.Rollback();
-			m_sqlTransaction = null;
+			m_sqlTransaction = null!;
 		}
 		/// <summary>
 		/// ExecuteNonQuery
@@ -318,7 +318,7 @@ namespace ItSoftware.Core.DbClient
 			if (m_sqlConnection != null)
 			{
 				this.Close();
-				this.m_sqlConnection = null;
+				this.m_sqlConnection = null!;
 			}
 		}
 	}// class

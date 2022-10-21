@@ -29,9 +29,9 @@ namespace ItSoftware.Core.Crypto
 		/// <returns></returns>
 		public static byte[] Encrypt(byte[] source, string key)
 		{
-			Aes aes = null;
-			MemoryStream memoryStream = null;
-			CryptoStream cryptoStream = null;
+			Aes aes = null!;
+			MemoryStream memoryStream = null!;
+			CryptoStream cryptoStream = null!;
 
 			try
 			{
@@ -119,8 +119,8 @@ namespace ItSoftware.Core.Crypto
 		/// <returns></returns>
 		public static byte[] Decrypt(byte[] source, string key)
 		{
-			Aes aes = null;
-			MemoryStream memoryStream = null;
+			Aes aes = null!;
+			MemoryStream memoryStream = null!;
 
 			try
 			{

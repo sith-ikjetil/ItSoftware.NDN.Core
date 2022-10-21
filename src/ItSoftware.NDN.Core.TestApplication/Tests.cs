@@ -8,7 +8,7 @@ using System.Diagnostics;
 using ItSoftware.Core.Extensions;
 using ItSoftware.Core.ID;
 using ItSoftware.Core.Log;
-using ItSoftware.Core.HttpHost;
+//using ItSoftware.Core.HttpHost;
 namespace ItSoftware.NDN.Core.TestApplication
 {
 	internal class Tests
@@ -242,7 +242,7 @@ namespace ItSoftware.NDN.Core.TestApplication
 		{
 			PrintTestHeader("ItsHttpHost");
 
-			using (ItsHttpHost host = new ItsHttpHost(5454))
+			/*using (ItsHttpHost host = new ItsHttpHost(5454))
 			{
 				host.Start(new List<ItsMiddleware> { new Middleware1(), new Middleware2() });
 				try
@@ -258,7 +258,7 @@ namespace ItSoftware.NDN.Core.TestApplication
 				}
 				Console.WriteLine("Server Ready at http://localhost:5454");
 				System.Threading.Thread.Sleep(1500);
-			}
+			}*/
 
 			Console.WriteLine();
 		}

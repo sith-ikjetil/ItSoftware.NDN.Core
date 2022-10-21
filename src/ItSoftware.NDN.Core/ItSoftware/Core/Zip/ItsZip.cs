@@ -40,7 +40,7 @@ namespace ItSoftware.Core.Zip
                 ZipEntry ze;
                 while ((ze = zis.GetNextEntry()) != null)
                 {
-                    string directory = Path.Combine(destinationDirectory, Path.GetDirectoryName(ze.Name));
+                    string directory = Path.Combine(destinationDirectory, Path.GetDirectoryName(ze.Name)!);
                     string file = Path.GetFileName(ze.Name);
 
                     if (!Directory.Exists(directory))
@@ -308,7 +308,7 @@ namespace ItSoftware.Core.Zip
                     return sb.ToString();
                 }
             }// using ( ZipInputStream
-            return null;
+            return null!;
         }
         /// <summary>
         /// 
@@ -350,7 +350,7 @@ namespace ItSoftware.Core.Zip
                     //return sb.ToString();
                 }
             }// using ( ZipInputStream
-            return null;
+            return null!;
         }
         public static string ToBase64(byte[] data)   
         {
