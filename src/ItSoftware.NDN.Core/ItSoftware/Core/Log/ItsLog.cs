@@ -27,9 +27,10 @@ namespace ItSoftware.Core.Log
 		#region Public Properties
 		public string FileName { get; private set; }
 		public ObservableCollection<ItsLogEntry> Entries { get; private set; } = new ObservableCollection<ItsLogEntry>( );
-		public string EventLogSourceName { get; private set; }
-		//public bool ReportToEventLog { get; set; } = true;
+		public string EventLogName { get; private set; }
 		public bool AutoSave { get; set; } = true;
+		public bool AutoPurge { get; set; } = false;
+		public int PurgeLimit { get; set; } = 5000;
 		public bool DoLogInformation { get; set; } = true;
 		public bool DoLogWarning { get; set; } = true;
 		public bool DoLogError { get; set; } = true;
@@ -46,10 +47,10 @@ namespace ItSoftware.Core.Log
         /// Constructor
         /// </summary>
         /// <param name="filename"></param>
-        public ItsLog( string filename, string eventLogSourceName, bool loadOld )
+        public ItsLog( string filename, string eventLogName, bool loadOld )
 		{
 			this.FileName = filename;
-			this.EventLogSourceName = eventLogSourceName;
+			this.EventLogName = eventLogName;
 
 			if ( loadOld )
 			{
@@ -85,7 +86,19 @@ namespace ItSoftware.Core.Log
 				{
 					this.Entries.Add( new ItsLogEntry( element ) );
 				}
-			}
+
+                if (this.AutoPurge)
+                {
+                    if (this.Entries.Count >= this.PurgeLimit)
+                    {
+                        this.Entries.Clear();
+                        if (this.AutoSave)
+                        {
+                            this.SaveLog();
+                        }
+                    }
+                }
+            }
 			catch ( System.Exception x )
 			{
 				this.ClearLog( );
@@ -117,7 +130,7 @@ namespace ItSoftware.Core.Log
 
             XElement xeRoot = new XElement("Log");
             xd.Add(xeRoot);
-            xeRoot.SetAttributeValue("Name", this.EventLogSourceName ?? string.Empty);
+            xeRoot.SetAttributeValue("Name", this.EventLogName ?? string.Empty);
 
             foreach (var entry in this.Entries)
             {
@@ -144,10 +157,17 @@ namespace ItSoftware.Core.Log
 				return;
             }
 
-			//if ( this.ReportToEventLog )
-			//{
-			//	EventLog.WriteEntry( this.EventLogSourceName, $"{title}{Environment.NewLine}{text}", EventLogEntryType.Information );
-			//}			
+			if (this.AutoPurge)
+			{
+				if (this.Entries.Count >= this.PurgeLimit )
+				{
+					this.Entries.Clear();
+					if (this.AutoSave)
+					{
+						this.SaveLog();
+					}
+				}
+			}
 
 			this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Information, When = DateTime.Now, Title = title } );
 
@@ -169,12 +189,19 @@ namespace ItSoftware.Core.Log
 				return;
             }
 
-			//if ( this.ReportToEventLog )
-			//{ 
-			//	EventLog.WriteEntry( this.EventLogSourceName, $"{title}{Environment.NewLine}{text}", EventLogEntryType.Warning );
-			//}			
+            if (this.AutoPurge)
+            {
+                if (this.Entries.Count >= this.PurgeLimit)
+                {
+                    this.Entries.Clear();
+                    if (this.AutoSave)
+                    {
+                        this.SaveLog();
+                    }
+                }
+            }
 
-			this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Warning, When = DateTime.Now, Title = title } );
+            this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Warning, When = DateTime.Now, Title = title } );
 
 			if ( this.AutoSave )
 			{
@@ -194,12 +221,19 @@ namespace ItSoftware.Core.Log
 				return;
             }
 
-			//if ( this.ReportToEventLog )
-			//{
-			//	EventLog.WriteEntry( this.EventLogSourceName, $"{title}{Environment.NewLine}{text}", EventLogEntryType.Error );
-			//}			
+            if (this.AutoPurge)
+            {
+                if (this.Entries.Count >= this.PurgeLimit)
+                {
+                    this.Entries.Clear();
+                    if (this.AutoSave)
+                    {
+                        this.SaveLog();
+                    }
+                }
+            }
 
-			this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Error, When = DateTime.Now, Title = title } );
+            this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Error, When = DateTime.Now, Title = title } );
 
 			if ( this.AutoSave )
 			{
@@ -219,7 +253,19 @@ namespace ItSoftware.Core.Log
 				return;
             }
 
-			this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Debug, When = DateTime.Now, Title = title } );
+            if (this.AutoPurge)
+            {
+                if (this.Entries.Count >= this.PurgeLimit)
+                {
+                    this.Entries.Clear();
+                    if (this.AutoSave)
+                    {
+                        this.SaveLog();
+                    }
+                }
+            }
+
+            this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Debug, When = DateTime.Now, Title = title } );
 
 			if ( this.AutoSave )
 			{
@@ -239,7 +285,19 @@ namespace ItSoftware.Core.Log
 				return;
             }
 
-			this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Other, When = DateTime.Now, Title = title } );
+            if (this.AutoPurge)
+            {
+                if (this.Entries.Count >= this.PurgeLimit)
+                {
+                    this.Entries.Clear();
+                    if (this.AutoSave)
+                    {
+                        this.SaveLog();
+                    }
+                }
+            }
+
+            this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Other, When = DateTime.Now, Title = title } );
 
 			if ( this.AutoSave )
 			{
