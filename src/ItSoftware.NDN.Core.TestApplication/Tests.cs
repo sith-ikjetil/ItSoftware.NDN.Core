@@ -220,8 +220,9 @@ namespace ItSoftware.NDN.Core.TestApplication
 			Console.WriteLine("TimeSpan.FromSeconds(487_965_892);");
 			TimeSpan ts = TimeSpan.FromSeconds(487_965_892);
 			Console.WriteLine($"> {ts.ItsRenderTimeSpan(false)}");
+            Console.WriteLine($"> {ts.ItsRenderTimeSpanFullWording(true)}");
 
-			Console.WriteLine();
+            Console.WriteLine();
 		}
 
 		private void TestItsRenderException()

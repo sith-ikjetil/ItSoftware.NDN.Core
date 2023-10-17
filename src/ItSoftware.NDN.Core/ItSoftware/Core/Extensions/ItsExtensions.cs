@@ -750,15 +750,98 @@ namespace ItSoftware.Core.Extensions
 
 			return time.ToString( );
 		}
-		#endregion
-
-		#region ItsHashXxx
 		/// <summary>
-		/// Hash to MD5.
+		/// 
 		/// </summary>
-		/// <param name="str"></param>
+		/// <param name="ts"></param>
+		/// <param name="includeMilliseconds"></param>
 		/// <returns></returns>
-		public static string ItsHashMD5( this string str, Encoding enc )
+        public static string ItsRenderTimeSpanFullWording(this TimeSpan ts, bool includeMilliseconds)
+        {
+            StringBuilder time = new StringBuilder();
+
+            if (ts.Days > 0)
+            {
+                long years = ts.Days / 365;
+                long days = ts.Days - (years * 365);
+
+                if (years > 0)
+                {
+                    if (years == 1)
+                    {
+                        time.Append($"{years} year ");
+                    }
+                    else
+                    {
+                        time.Append($"{years} years ");
+                    }
+                }
+
+                if (days > 0)
+                {
+                    if (days == 1)
+                    {
+                        time.Append($"{days} day ");
+                    }
+                    else
+                    {
+                        time.Append($"{days} days ");
+                    }
+                }
+            }
+
+            if (ts.Hours > 0)
+            {
+                if (ts.Hours == 1)
+                {
+                    time.Append($"{ts.Hours} hour ");
+                }
+                else
+                {
+                    time.Append($"{ts.Hours} hours ");
+                }
+            }
+
+            if (ts.Minutes > 0)
+            {
+                if (ts.Minutes == 1)
+                {
+                    time.Append($"{ts.Minutes} minute ");
+                }
+                else
+                {
+                    time.Append($"{ts.Minutes} minutes ");
+                }
+            }
+
+            if (ts.Seconds > 0)
+            {
+                if (ts.Seconds == 1)
+                {
+                    time.Append($"{ts.Seconds} second ");
+                }
+                else
+                {
+                    time.Append($"{ts.Seconds} seconds ");
+                }
+            }
+            
+            if (includeMilliseconds)
+            {
+                time.Append($"{ts.Milliseconds.ToString("D3")} milliseconds");
+            }
+
+			return time.ToString().TrimEnd();
+        }
+        #endregion
+
+        #region ItsHashXxx
+        /// <summary>
+        /// Hash to MD5.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string ItsHashMD5( this string str, Encoding enc )
 		{
 			return ItsHash.HashMD5( str, enc );
 		}
