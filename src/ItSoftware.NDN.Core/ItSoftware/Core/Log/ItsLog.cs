@@ -86,43 +86,41 @@ namespace ItSoftware.Core.Log
 			lock (this._lock)
 			{
 				this.ClearLog();
-			}
 
-			try
-			{
-				XDocument xd = XDocument.Load(filename);
-
-				lock (this._lock)
+				try
 				{
+					XDocument xd = XDocument.Load(filename);
+
 					foreach (var element in xd.Root?.Elements("LogEntry") ?? Enumerable.Empty<XElement>())
 					{
 						this.Entries.Add(new ItsLogEntry(element));
 					}
-				}
 
-				if (this.AutoPurge)
-				{
-					if (this.Entries.Count >= this.PurgeLimit)
+					if (this.AutoPurge)
 					{
-						lock (this._lock)
+						if (this.Entries.Count >= this.PurgeLimit)
 						{
+							var elements = this.Entries.TakeLast(this.PurgeLimit);
 							this.Entries.Clear();
-						}
-						if (this.AutoSave)
-						{
-							lock (this._lock)
+							foreach (var e in elements)
+							{
+								this.Entries.Add(e);
+							}
+
+							if (this.AutoSave)
 							{
 								this.SaveLog();
 							}
+
 						}
 					}
 				}
-			}
-			catch (System.Exception x)
-			{
-				this.ClearLog();
-				this.LogError("ItsLog.LoadLog", x.ItsRenderException());
-			}
+				catch (System.Exception x)
+				{
+					this.ClearLog();
+					this.LogError("ItsLog.LoadLog", x.ItsRenderException());
+				}
+			}// lock
 		}
 		/// <summary>
 		/// 
@@ -192,10 +190,13 @@ namespace ItSoftware.Core.Log
 				}
 
 				if (this.AutoPurge)
-				{
+				{					
 					if (this.Entries.Count >= this.PurgeLimit)
 					{
+						var elements = new ObservableCollection<ItsLogEntry>(this.Entries.TakeLast(this.PurgeLimit-1));
 						this.Entries.Clear();
+						this.Entries = elements;
+
 						if (this.AutoSave)
 						{
 							this.SaveLog();
@@ -238,15 +239,18 @@ namespace ItSoftware.Core.Log
 
 				if (this.AutoPurge)
 				{
-					if (this.Entries.Count >= this.PurgeLimit)
-					{
-						this.Entries.Clear();
-						if (this.AutoSave)
-						{
-							this.SaveLog();
-						}
-					}
-				}
+                    if (this.Entries.Count >= this.PurgeLimit)
+                    {
+                        var elements = new ObservableCollection<ItsLogEntry>(this.Entries.TakeLast(this.PurgeLimit - 1));
+                        this.Entries.Clear();
+                        this.Entries = elements;
+
+                        if (this.AutoSave)
+                        {
+                            this.SaveLog();
+                        }
+                    }
+                }
 
 				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Warning, When = DateTime.Now, Title = title });
 
@@ -283,15 +287,18 @@ namespace ItSoftware.Core.Log
 
 				if (this.AutoPurge)
 				{
-					if (this.Entries.Count >= this.PurgeLimit)
-					{
-						this.Entries.Clear();
-						if (this.AutoSave)
-						{
-							this.SaveLog();
-						}
-					}
-				}
+                    if (this.Entries.Count >= this.PurgeLimit)
+                    {
+                        var elements = new ObservableCollection<ItsLogEntry>(this.Entries.TakeLast(this.PurgeLimit - 1));
+                        this.Entries.Clear();
+                        this.Entries = elements;
+
+                        if (this.AutoSave)
+                        {
+                            this.SaveLog();
+                        }
+                    }
+                }
 
 				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Error, When = DateTime.Now, Title = title });
 
@@ -328,15 +335,18 @@ namespace ItSoftware.Core.Log
 
 				if (this.AutoPurge)
 				{
-					if (this.Entries.Count >= this.PurgeLimit)
-					{
-						this.Entries.Clear();
-						if (this.AutoSave)
-						{
-							this.SaveLog();
-						}
-					}
-				}
+                    if (this.Entries.Count >= this.PurgeLimit)
+                    {
+                        var elements = new ObservableCollection<ItsLogEntry>(this.Entries.TakeLast(this.PurgeLimit - 1));
+                        this.Entries.Clear();
+                        this.Entries = elements;
+
+                        if (this.AutoSave)
+                        {
+                            this.SaveLog();
+                        }
+                    }
+                }
 
 				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Debug, When = DateTime.Now, Title = title });
 
@@ -373,15 +383,18 @@ namespace ItSoftware.Core.Log
 
 				if (this.AutoPurge)
 				{
-					if (this.Entries.Count >= this.PurgeLimit)
-					{
-						this.Entries.Clear();
-						if (this.AutoSave)
-						{
-							this.SaveLog();
-						}
-					}
-				}
+                    if (this.Entries.Count >= this.PurgeLimit)
+                    {
+                        var elements = new ObservableCollection<ItsLogEntry>(this.Entries.TakeLast(this.PurgeLimit - 1));
+                        this.Entries.Clear();
+                        this.Entries = elements;
+
+                        if (this.AutoSave)
+                        {
+                            this.SaveLog();
+                        }
+                    }
+                }
 
 				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Other, When = DateTime.Now, Title = title });
 

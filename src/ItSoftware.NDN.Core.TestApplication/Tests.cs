@@ -108,6 +108,9 @@ namespace ItSoftware.NDN.Core.TestApplication
 			PrintTestHeader("ItsLog");
 
 			ItsLog log = new ItsLog("D:\\ItsLog.xml", "ItSoftware.NDN.Core", false);
+			log.AutoPurge = true;
+			log.PurgeLimit = 30;
+
 			log.ItemAdded += (sender ,e) => {
 				Console.WriteLine($"ItemAdded: {e.ItemAdded.Type.ToString()}");
 			};
@@ -117,7 +120,14 @@ namespace ItSoftware.NDN.Core.TestApplication
 			log.LogDebug("Debug Title", "Debug text");
 			log.LogOther("Other Title", "Other text");
 
+			for (int i = 0; i < 40; i++)
+			{
+				log.LogInformation("Hello, World!", "Hello, World!");
+			}
+
 			Console.WriteLine(log.ToString());
+
+			Console.WriteLine($"Number of items: {log.Entries.Count}");
 
 			Console.WriteLine();
 		}
