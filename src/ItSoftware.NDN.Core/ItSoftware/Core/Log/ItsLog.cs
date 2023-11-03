@@ -20,8 +20,12 @@ namespace ItSoftware.Core.Log
 
     public class ItsLog
 	{
-		#region Public Static Properties
-		public static ItsLog ApplicationLog { get; set; } = null!;
+        #region Private Fields
+        private object _lock = new object();		
+		#endregion
+
+        #region Public Static Properties
+        public static ItsLog ApplicationLog { get; set; } = null!;
 		#endregion
 
 		#region Public Properties
@@ -68,7 +72,10 @@ namespace ItSoftware.Core.Log
 		/// </summary>
 		public void ClearLog( )
 		{
-			this.Entries.Clear( );
+			lock (this._lock)
+			{
+				this.Entries.Clear();
+			}
 		}
 		/// <summary>
 		/// Loads log from file.
@@ -76,33 +83,45 @@ namespace ItSoftware.Core.Log
 		/// <param name="filename"></param>
 		public void LoadLog( string filename )
 		{
-			this.ClearLog( );
+			lock (this._lock)
+			{
+				this.ClearLog();
+			}
 
 			try
 			{
-				XDocument xd = XDocument.Load( filename );
+				XDocument xd = XDocument.Load(filename);
 
-				foreach ( var element in xd.Root?.Elements( "LogEntry" ) ?? Enumerable.Empty<XElement>())
+				lock (this._lock)
 				{
-					this.Entries.Add( new ItsLogEntry( element ) );
+					foreach (var element in xd.Root?.Elements("LogEntry") ?? Enumerable.Empty<XElement>())
+					{
+						this.Entries.Add(new ItsLogEntry(element));
+					}
 				}
 
-                if (this.AutoPurge)
-                {
-                    if (this.Entries.Count >= this.PurgeLimit)
-                    {
-                        this.Entries.Clear();
-                        if (this.AutoSave)
-                        {
-                            this.SaveLog();
-                        }
-                    }
-                }
-            }
-			catch ( System.Exception x )
+				if (this.AutoPurge)
+				{
+					if (this.Entries.Count >= this.PurgeLimit)
+					{
+						lock (this._lock)
+						{
+							this.Entries.Clear();
+						}
+						if (this.AutoSave)
+						{
+							lock (this._lock)
+							{
+								this.SaveLog();
+							}
+						}
+					}
+				}
+			}
+			catch (System.Exception x)
 			{
-				this.ClearLog( );
-				this.LogError( "ItsLog.LoadLog", x.ItsRenderException( ) );
+				this.ClearLog();
+				this.LogError("ItsLog.LoadLog", x.ItsRenderException());
 			}
 		}
 		/// <summary>
@@ -132,17 +151,20 @@ namespace ItSoftware.Core.Log
             xd.Add(xeRoot);
             xeRoot.SetAttributeValue("Name", this.EventLogName ?? string.Empty);
 
-            foreach (var entry in this.Entries)
-            {
-                try
-                {
-                    xeRoot.Add(entry.ToXElement());
-                }
-                catch (System.Exception)
-                {
+			lock (this._lock)
+			{
+				foreach (var entry in this.Entries)
+				{
+					try
+					{
+						xeRoot.Add(entry.ToXElement());
+					}
+					catch (System.Exception)
+					{
 
-                }
-            }
+					}
+				}
+			}
 
             return xd;
         }
@@ -162,31 +184,34 @@ namespace ItSoftware.Core.Log
 		/// <param name="customText"></param>
         public void LogInformation(string title, string text, string customText)
 		{
-			if ( !this.DoLogInformation )
-            {
-				return;
-            }
-
-			if (this.AutoPurge)
+			lock (this._lock)
 			{
-				if (this.Entries.Count >= this.PurgeLimit )
+				if (!this.DoLogInformation)
 				{
-					this.Entries.Clear();
-					if (this.AutoSave)
+					return;
+				}
+
+				if (this.AutoPurge)
+				{
+					if (this.Entries.Count >= this.PurgeLimit)
 					{
-						this.SaveLog();
+						this.Entries.Clear();
+						if (this.AutoSave)
+						{
+							this.SaveLog();
+						}
 					}
 				}
+
+				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Information, When = DateTime.Now, Title = title });
+
+				if (this.AutoSave)
+				{
+					this.SaveLog();
+				}
+
+				this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
 			}
-
-			this.Entries.Add( new ItsLogEntry( ) { Text = text, CustomText=customText, Type = ItsLogType.Information, When = DateTime.Now, Title = title } );
-
-			if ( this.AutoSave )
-			{
-				this.SaveLog( );
-			}
-
-            this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
         }
 		/// <summary>
 		/// Log warning entry.
@@ -204,31 +229,34 @@ namespace ItSoftware.Core.Log
 		/// <param name="customText"></param>
         public void LogWarning(string title, string text, string customText)
         {
-			if (!this.DoLogWarning)
-            {
-				return;
-            }
-
-            if (this.AutoPurge)
-            {
-                if (this.Entries.Count >= this.PurgeLimit)
-                {
-                    this.Entries.Clear();
-                    if (this.AutoSave)
-                    {
-                        this.SaveLog();
-                    }
-                }
-            }
-
-            this.Entries.Add( new ItsLogEntry( ) { Text = text, CustomText=customText, Type = ItsLogType.Warning, When = DateTime.Now, Title = title } );
-
-			if ( this.AutoSave )
+			lock (this._lock)
 			{
-				this.SaveLog( );
-			}
+				if (!this.DoLogWarning)
+				{
+					return;
+				}
 
-            this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
+				if (this.AutoPurge)
+				{
+					if (this.Entries.Count >= this.PurgeLimit)
+					{
+						this.Entries.Clear();
+						if (this.AutoSave)
+						{
+							this.SaveLog();
+						}
+					}
+				}
+
+				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Warning, When = DateTime.Now, Title = title });
+
+				if (this.AutoSave)
+				{
+					this.SaveLog();
+				}
+
+				this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
+			}
         }
 		/// <summary>
 		/// Log error entry.
@@ -246,31 +274,34 @@ namespace ItSoftware.Core.Log
 		/// <param name="customText"></param>
 		public void LogError(string title, string text, string customText)
 		{
-			if (!this.DoLogError)
-            {
-				return;
-            }
-
-            if (this.AutoPurge)
-            {
-                if (this.Entries.Count >= this.PurgeLimit)
-                {
-                    this.Entries.Clear();
-                    if (this.AutoSave)
-                    {
-                        this.SaveLog();
-                    }
-                }
-            }
-
-            this.Entries.Add( new ItsLogEntry( ) { Text = text, CustomText = customText, Type = ItsLogType.Error, When = DateTime.Now, Title = title } );
-
-			if ( this.AutoSave )
+			lock (this._lock)
 			{
-				this.SaveLog( );
-			}
+				if (!this.DoLogError)
+				{
+					return;
+				}
 
-            this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
+				if (this.AutoPurge)
+				{
+					if (this.Entries.Count >= this.PurgeLimit)
+					{
+						this.Entries.Clear();
+						if (this.AutoSave)
+						{
+							this.SaveLog();
+						}
+					}
+				}
+
+				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Error, When = DateTime.Now, Title = title });
+
+				if (this.AutoSave)
+				{
+					this.SaveLog();
+				}
+
+				this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
+			}
         }
 		/// <summary>
 		/// Log debug entry.
@@ -288,31 +319,34 @@ namespace ItSoftware.Core.Log
 		/// <param name="customText"></param>
 		public void LogDebug( string title, string text, string customText)
 		{
-			if (!this.DoLogDebug)
-            {
-				return;
-            }
-
-            if (this.AutoPurge)
-            {
-                if (this.Entries.Count >= this.PurgeLimit)
-                {
-                    this.Entries.Clear();
-                    if (this.AutoSave)
-                    {
-                        this.SaveLog();
-                    }
-                }
-            }
-
-            this.Entries.Add( new ItsLogEntry( ) { Text = text, CustomText = customText, Type = ItsLogType.Debug, When = DateTime.Now, Title = title } );
-
-			if ( this.AutoSave )
+			lock (this._lock)
 			{
-				this.SaveLog( );
-			}
+				if (!this.DoLogDebug)
+				{
+					return;
+				}
 
-            this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
+				if (this.AutoPurge)
+				{
+					if (this.Entries.Count >= this.PurgeLimit)
+					{
+						this.Entries.Clear();
+						if (this.AutoSave)
+						{
+							this.SaveLog();
+						}
+					}
+				}
+
+				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Debug, When = DateTime.Now, Title = title });
+
+				if (this.AutoSave)
+				{
+					this.SaveLog();
+				}
+
+				this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
+			}
         }
 		/// <summary>
 		/// Log other entry.
@@ -330,39 +364,45 @@ namespace ItSoftware.Core.Log
 		/// <param name="customText"></param>
 		public void LogOther(string title, string text, string customText)
 		{
-			if (!this.DoLogOther)
-            {
-				return;
-            }
-
-            if (this.AutoPurge)
-            {
-                if (this.Entries.Count >= this.PurgeLimit)
-                {
-                    this.Entries.Clear();
-                    if (this.AutoSave)
-                    {
-                        this.SaveLog();
-                    }
-                }
-            }
-
-            this.Entries.Add( new ItsLogEntry( ) { Text = text, CustomText=customText, Type = ItsLogType.Other, When = DateTime.Now, Title = title } );
-
-			if ( this.AutoSave )
+			lock (this._lock)
 			{
-				this.SaveLog( );
-			}
+				if (!this.DoLogOther)
+				{
+					return;
+				}
 
-            this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
+				if (this.AutoPurge)
+				{
+					if (this.Entries.Count >= this.PurgeLimit)
+					{
+						this.Entries.Clear();
+						if (this.AutoSave)
+						{
+							this.SaveLog();
+						}
+					}
+				}
+
+				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Other, When = DateTime.Now, Title = title });
+
+				if (this.AutoSave)
+				{
+					this.SaveLog();
+				}
+
+				this.ItemAdded?.Invoke(this, new ItsLogEventArgs() { ItemAdded = this.Entries.Last() });
+			}
         }
 
 		public override string ToString()
 		{
 			StringBuilder txt = new StringBuilder();
-			foreach ( var i in this.Entries )
+			lock (this._lock)
 			{
-				txt.AppendLine($"{Enum.GetName(typeof(ItsLogType),i.Type)} : {i.When.ToString("s")} : {i.Title.Replace(":",",")} : {i.Text.Replace(":",",")}");
+				foreach (var i in this.Entries)
+				{
+					txt.AppendLine($"{Enum.GetName(typeof(ItsLogType), i.Type)} : {i.When.ToString("s")} : {i.Title.Replace(":", ",")} : {i.Text.Replace(":", ",")}");
+				}
 			}
 			return txt.ToString();
 		}
