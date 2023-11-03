@@ -179,8 +179,8 @@ namespace ItSoftware.Core.Log
 		/// </summary>
 		/// <param name="title"></param>
 		/// <param name="text"></param>
-		/// <param name="customText"></param>
-        public void LogInformation(string title, string text, string customText)
+		/// <param name="details"></param>
+        public void LogInformation(string title, string text, string details)
 		{
 			lock (this._lock)
 			{
@@ -204,7 +204,7 @@ namespace ItSoftware.Core.Log
 					}
 				}
 
-				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Information, When = DateTime.Now, Title = title });
+				this.Entries.Add(new ItsLogEntry() { Text = text, Details = details, Type = ItsLogType.Information, When = DateTime.Now, Title = title });
 
 				if (this.AutoSave)
 				{
@@ -227,8 +227,8 @@ namespace ItSoftware.Core.Log
 		/// </summary>
 		/// <param name="title"></param>
 		/// <param name="text"></param>
-		/// <param name="customText"></param>
-        public void LogWarning(string title, string text, string customText)
+		/// <param name="details"></param>
+        public void LogWarning(string title, string text, string details)
         {
 			lock (this._lock)
 			{
@@ -252,7 +252,7 @@ namespace ItSoftware.Core.Log
                     }
                 }
 
-				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Warning, When = DateTime.Now, Title = title });
+				this.Entries.Add(new ItsLogEntry() { Text = text, Details = details, Type = ItsLogType.Warning, When = DateTime.Now, Title = title });
 
 				if (this.AutoSave)
 				{
@@ -275,8 +275,8 @@ namespace ItSoftware.Core.Log
 		/// </summary>
 		/// <param name="title"></param>
 		/// <param name="text"></param>
-		/// <param name="customText"></param>
-		public void LogError(string title, string text, string customText)
+		/// <param name="details"></param>
+		public void LogError(string title, string text, string details)
 		{
 			lock (this._lock)
 			{
@@ -300,7 +300,7 @@ namespace ItSoftware.Core.Log
                     }
                 }
 
-				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Error, When = DateTime.Now, Title = title });
+				this.Entries.Add(new ItsLogEntry() { Text = text, Details = details, Type = ItsLogType.Error, When = DateTime.Now, Title = title });
 
 				if (this.AutoSave)
 				{
@@ -323,8 +323,8 @@ namespace ItSoftware.Core.Log
 		/// </summary>
 		/// <param name="title"></param>
 		/// <param name="text"></param>
-		/// <param name="customText"></param>
-		public void LogDebug( string title, string text, string customText)
+		/// <param name="details"></param>
+		public void LogDebug( string title, string text, string details)
 		{
 			lock (this._lock)
 			{
@@ -348,7 +348,7 @@ namespace ItSoftware.Core.Log
                     }
                 }
 
-				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Debug, When = DateTime.Now, Title = title });
+				this.Entries.Add(new ItsLogEntry() { Text = text, Details = details, Type = ItsLogType.Debug, When = DateTime.Now, Title = title });
 
 				if (this.AutoSave)
 				{
@@ -371,8 +371,8 @@ namespace ItSoftware.Core.Log
 		/// </summary>
 		/// <param name="title"></param>
 		/// <param name="text"></param>
-		/// <param name="customText"></param>
-		public void LogOther(string title, string text, string customText)
+		/// <param name="details"></param>
+		public void LogOther(string title, string text, string details)
 		{
 			lock (this._lock)
 			{
@@ -396,7 +396,7 @@ namespace ItSoftware.Core.Log
                     }
                 }
 
-				this.Entries.Add(new ItsLogEntry() { Text = text, CustomText = customText, Type = ItsLogType.Other, When = DateTime.Now, Title = title });
+				this.Entries.Add(new ItsLogEntry() { Text = text, Details = details, Type = ItsLogType.Other, When = DateTime.Now, Title = title });
 
 				if (this.AutoSave)
 				{

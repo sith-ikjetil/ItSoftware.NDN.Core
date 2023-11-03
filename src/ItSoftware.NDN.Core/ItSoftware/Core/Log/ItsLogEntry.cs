@@ -13,7 +13,7 @@ namespace ItSoftware.Core.Log
 		public ItsLogType Type { get; set; } = ItsLogType.Information;
 		public string Title { get; set; } = null!;
 		public string Text { get; set; } = null!;
-		public string CustomText { get; set; } = null!;
+		public string Details { get; set; } = null!;
 		public DateTime When { get; set; } = DateTime.MinValue;
 		#endregion
 
@@ -32,17 +32,25 @@ namespace ItSoftware.Core.Log
 		public ItsLogEntry( XElement xe )
 		{
 			this.Type = (ItsLogType) Enum.Parse( typeof( ItsLogType ), xe.Attribute( "Type" )?.Value ?? ItsLogType.Information.ToString(), false );
-			this.Title = xe.Attribute( "Title" )?.Value ?? String.Empty;
-			this.Text = xe.Value;
+			this.Title = xe.Attribute( "Title" )?.Value ?? String.Empty;			
 			this.When = DateTime.Parse( xe.Attribute( "When" )?.Value ?? DateTime.Now.ToString("s"));
 
-			if (xe.Element("CustomText") != null )
+			if (xe.Element("Text") != null)
 			{
-				this.CustomText = xe.Element("CustomText")?.Value ?? string.Empty;
+                this.Text = xe.Element("Text")?.Value ?? string.Empty;
+            }
+			else
+			{
+				this.Text = string.Empty;
+			}
+			
+            if (xe.Element("Details") != null )
+			{
+				this.Details = xe.Element("Details")?.Value ?? string.Empty;
 			}
             else
             {
-				this.CustomText = string.Empty;
+				this.Details = string.Empty;
             }
         }
 		#endregion
@@ -58,11 +66,14 @@ namespace ItSoftware.Core.Log
 			xe.SetAttributeValue( "Type", this.Type.ToString( ) );
 			xe.SetAttributeValue( "Title", this.Title );
 			xe.SetAttributeValue( "When", this.When.ToString( "s" ) );
-			xe.Value = this.Text;
 
-			XElement xeCustom = new XElement("CustomText");
-			xeCustom.Value = this.CustomText ?? string.Empty;
-			xe.Add(xeCustom);
+            XElement xeText = new XElement("Text");
+            xeText.Value = this.Text ?? string.Empty;
+            xe.Add(xeText);
+			
+			XElement xeDetails = new XElement("Details");
+            xeDetails.Value = this.Details ?? string.Empty;
+			xe.Add(xeDetails);
 
 			return xe;
 		}
