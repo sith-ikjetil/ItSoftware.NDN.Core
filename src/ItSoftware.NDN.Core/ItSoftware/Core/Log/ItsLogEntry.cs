@@ -13,6 +13,7 @@ namespace ItSoftware.Core.Log
 		public ItsLogType Type { get; set; } = ItsLogType.Information;
 		public string Title { get; set; } = null!;
 		public string Text { get; set; } = null!;
+		public string CustomText { get; set; } = null!;
 		public DateTime When { get; set; } = DateTime.MinValue;
 		#endregion
 
@@ -34,7 +35,16 @@ namespace ItSoftware.Core.Log
 			this.Title = xe.Attribute( "Title" )?.Value ?? String.Empty;
 			this.Text = xe.Value;
 			this.When = DateTime.Parse( xe.Attribute( "When" )?.Value ?? DateTime.Now.ToString("s"));
-		}
+
+			if (xe.Element("CustomText") != null )
+			{
+				this.CustomText = xe.Element("CustomText")?.Value ?? string.Empty;
+			}
+            else
+            {
+				this.CustomText = string.Empty;
+            }
+        }
 		#endregion
 
 		#region Public Methods
@@ -49,6 +59,10 @@ namespace ItSoftware.Core.Log
 			xe.SetAttributeValue( "Title", this.Title );
 			xe.SetAttributeValue( "When", this.When.ToString( "s" ) );
 			xe.Value = this.Text;
+
+			XElement xeCustom = new XElement("CustomText");
+			xeCustom.Value = this.CustomText ?? string.Empty;
+			xe.Add(xeCustom);
 
 			return xe;
 		}

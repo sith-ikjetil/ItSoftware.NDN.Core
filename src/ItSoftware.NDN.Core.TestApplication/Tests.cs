@@ -33,7 +33,8 @@ namespace ItSoftware.NDN.Core.TestApplication
 				this.TestItsID();
 				this.TestItsRenderTimeSpan();
 				this.TestItsRenderException();
-				this.TestItsHttpHost();
+                this.TestItsRenderExceptionShort();
+                this.TestItsHttpHost();
 				this.TestItsRandom();
 			}
 			catch (Exception y)
@@ -239,7 +240,21 @@ namespace ItSoftware.NDN.Core.TestApplication
 			Console.WriteLine();
 		}
 
-		private void TestItsHttpHost()
+        private void TestItsRenderExceptionShort()
+        {
+            PrintTestHeader("ItsRenderExceptionShort");
+
+            var x = new ArgumentException("yes", new NullReferenceException());
+            x.Data.Add("StringKey", "StringValue");
+            x.Data.Add("TestNULL", null);
+            x.Data.Add(544, 545);
+            x.Data.Add(new object(), 1001);
+            Console.WriteLine(x.ItsRenderExceptionShort());
+
+            Console.WriteLine();
+        }
+
+        private void TestItsHttpHost()
 		{
 			PrintTestHeader("ItsHttpHost");
 

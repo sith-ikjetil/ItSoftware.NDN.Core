@@ -67,15 +67,7 @@ namespace ItSoftware.Core.Extensions
 			output.AppendLine(string.Format("OS Version: {0}", Environment.OSVersion));
 			output.AppendLine(string.Format("Processor Count: {0}", Environment.ProcessorCount));
 			output.AppendLine(string.Format("CLR Version: {0}", Environment.Version));
-			output.AppendLine();
-
-			output.AppendLine("#####################################");
-			output.AppendLine("## Summary");
-			output.AppendLine("##");
-			output.Append(ItsExtensions.ItsRenderExceptionShort(exception));
-			output.AppendLine();
-
-			output.Append(ItsExceptionRenderExtension.Render(exception));
+			output.AppendLine();						
 
 			ItsExtensions.RenderExceptionHelper(output, exception, false);
 
@@ -119,42 +111,43 @@ namespace ItSoftware.Core.Extensions
 				RenderExceptionHelper(output, exception.InnerException, true);
 			}
 		}
-		#endregion
+        #endregion
 
-		#region ItsRenderExceptionShort
-		public static string ItsRenderExceptionShort(this System.Exception x)
+        #region ItsRenderExceptionShort
+        /// <summary>
+        /// ItsRenderExceptionShort implementation.
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
+        public static string ItsRenderExceptionShort(this System.Exception exception)
 		{
-			if (x == null)
-			{
-				return string.Empty;
-			}
+            StringBuilder output = new StringBuilder();
+            output.AppendLine();
+            output.AppendLine("####################################");
+            output.AppendLine($"## Timestamp: {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}");
+            output.AppendLine();
 
-			var msg = new StringBuilder();
+            output.AppendLine("####################################");
+            output.AppendLine("## Summary");
+            output.AppendLine("##");
+			output.AppendLine($"Full Name: {exception.GetType().FullName}");
+			output.AppendLine($"Message: {exception.Message}");
+			output.AppendLine();			
 
-			System.Exception y = x;
-			do
-			{
-				msg.AppendLine(y.GetType().FullName);
-				msg.AppendLine(y.Message);
-				msg.AppendLine();
+            return output.ToString();
+        }        
+        #endregion
 
-				y = y.InnerException!;
-			} while (y != null);
-
-			return msg.ToString();
-		}
-		#endregion
-
-		#region ItsStringBetweenStrings
-		/// <summary>
-		/// Finds the first string that lies in source between substr1 and substr2 or between
-		/// substr2 and substr1.
-		/// </summary>
-		/// <param name="source">String to search in.</param>
-		/// <param name="substr1">String to find between.</param>
-		/// <param name="substr2">String to find between.</param>
-		/// <returns></returns>
-		public static string ItsStringBetweenStrings(this string source, string substr1, string substr2)
+        #region ItsStringBetweenStrings
+        /// <summary>
+        /// Finds the first string that lies in source between substr1 and substr2 or between
+        /// substr2 and substr1.
+        /// </summary>
+        /// <param name="source">String to search in.</param>
+        /// <param name="substr1">String to find between.</param>
+        /// <param name="substr2">String to find between.</param>
+        /// <returns></returns>
+        public static string ItsStringBetweenStrings(this string source, string substr1, string substr2)
 		{
 			if (string.IsNullOrEmpty(source))
 			{
