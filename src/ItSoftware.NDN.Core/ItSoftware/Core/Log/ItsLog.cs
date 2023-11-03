@@ -150,7 +150,17 @@ namespace ItSoftware.Core.Log
         /// Log information entry.
         /// </summary>
         /// <param name="text"></param>
-        public void LogInformation( string title, string text )
+		public void LogInformation(string title, string text)
+        {
+			this.LogInformation(title, text, string.Empty);
+		}        
+		/// <summary>
+		/// Log information entry.
+		/// </summary>
+		/// <param name="title"></param>
+		/// <param name="text"></param>
+		/// <param name="customText"></param>
+        public void LogInformation(string title, string text, string customText)
 		{
 			if ( !this.DoLogInformation )
             {
@@ -169,7 +179,7 @@ namespace ItSoftware.Core.Log
 				}
 			}
 
-			this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Information, When = DateTime.Now, Title = title } );
+			this.Entries.Add( new ItsLogEntry( ) { Text = text, CustomText=customText, Type = ItsLogType.Information, When = DateTime.Now, Title = title } );
 
 			if ( this.AutoSave )
 			{
@@ -184,6 +194,16 @@ namespace ItSoftware.Core.Log
 		/// <param name="text"></param>
 		public void LogWarning( string title, string text )
 		{
+			this.LogWarning(title, text, string.Empty);
+		}
+		/// <summary>
+		/// Log warning entry.
+		/// </summary>
+		/// <param name="title"></param>
+		/// <param name="text"></param>
+		/// <param name="customText"></param>
+        public void LogWarning(string title, string text, string customText)
+        {
 			if (!this.DoLogWarning)
             {
 				return;
@@ -201,7 +221,7 @@ namespace ItSoftware.Core.Log
                 }
             }
 
-            this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Warning, When = DateTime.Now, Title = title } );
+            this.Entries.Add( new ItsLogEntry( ) { Text = text, CustomText=customText, Type = ItsLogType.Warning, When = DateTime.Now, Title = title } );
 
 			if ( this.AutoSave )
 			{
@@ -215,6 +235,16 @@ namespace ItSoftware.Core.Log
 		/// </summary>
 		/// <param name="text"></param>
 		public void LogError( string title, string text )
+		{ 
+			this.LogError(title, text, string.Empty);
+		}
+		/// <summary>
+		/// Log error entry
+		/// </summary>
+		/// <param name="title"></param>
+		/// <param name="text"></param>
+		/// <param name="customText"></param>
+		public void LogError(string title, string text, string customText)
 		{
 			if (!this.DoLogError)
             {
@@ -233,7 +263,7 @@ namespace ItSoftware.Core.Log
                 }
             }
 
-            this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Error, When = DateTime.Now, Title = title } );
+            this.Entries.Add( new ItsLogEntry( ) { Text = text, CustomText = customText, Type = ItsLogType.Error, When = DateTime.Now, Title = title } );
 
 			if ( this.AutoSave )
 			{
@@ -247,6 +277,16 @@ namespace ItSoftware.Core.Log
 		/// </summary>
 		/// <param name="text"></param>
 		public void LogDebug( string title, string text )
+		{
+			this.LogDebug(title, text, string.Empty);
+		}
+		/// <summary>
+		/// Log debug entry.
+		/// </summary>
+		/// <param name="title"></param>
+		/// <param name="text"></param>
+		/// <param name="customText"></param>
+		public void LogDebug( string title, string text, string customText)
 		{
 			if (!this.DoLogDebug)
             {
@@ -265,7 +305,7 @@ namespace ItSoftware.Core.Log
                 }
             }
 
-            this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Debug, When = DateTime.Now, Title = title } );
+            this.Entries.Add( new ItsLogEntry( ) { Text = text, CustomText = customText, Type = ItsLogType.Debug, When = DateTime.Now, Title = title } );
 
 			if ( this.AutoSave )
 			{
@@ -279,6 +319,16 @@ namespace ItSoftware.Core.Log
 		/// </summary>
 		/// <param name="text"></param>
 		public void LogOther( string title, string text )
+		{
+			this.LogOther(title, text, string.Empty);
+		}
+		/// <summary>
+		/// Log other entry.
+		/// </summary>
+		/// <param name="title"></param>
+		/// <param name="text"></param>
+		/// <param name="customText"></param>
+		public void LogOther(string title, string text, string customText)
 		{
 			if (!this.DoLogOther)
             {
@@ -297,7 +347,7 @@ namespace ItSoftware.Core.Log
                 }
             }
 
-            this.Entries.Add( new ItsLogEntry( ) { Text = text, Type = ItsLogType.Other, When = DateTime.Now, Title = title } );
+            this.Entries.Add( new ItsLogEntry( ) { Text = text, CustomText=customText, Type = ItsLogType.Other, When = DateTime.Now, Title = title } );
 
 			if ( this.AutoSave )
 			{
