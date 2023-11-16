@@ -38,7 +38,7 @@ namespace ItSoftware.Core.Crypto
 				//Generate a Key based on a Password and HMACSHA1 pseudo-random number generator
 				//Salt must be at least 8 bytes long
 				//Use an iteration count of at least 1000
-				Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(key, Encoding.UTF8.GetBytes(ItsCrypto.EncryptionSalt), 1000);
+				Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(key, Encoding.UTF8.GetBytes(ItsCrypto.EncryptionSalt), 1000, HashAlgorithmName.SHA256);
 
 				//Create AES algorithm
 				aes = Aes.Create();
@@ -127,7 +127,7 @@ namespace ItSoftware.Core.Crypto
 				//Generate a Key based on a Password and HMACSHA1 pseudo-random number generator
 				//Salt must be at least 8 bytes long
 				//Use an iteration count of at least 1000
-				Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(key, Encoding.UTF8.GetBytes(ItsCrypto.EncryptionSalt), 1000);
+				Rfc2898DeriveBytes rfc2898 = new Rfc2898DeriveBytes(key, Encoding.UTF8.GetBytes(ItsCrypto.EncryptionSalt), 1000, HashAlgorithmName.SHA256);
 
 				//Create AES algorithm
 				aes = Aes.Create();

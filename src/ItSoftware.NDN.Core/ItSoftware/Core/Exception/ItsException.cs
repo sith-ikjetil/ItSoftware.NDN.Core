@@ -45,11 +45,11 @@ namespace ItSoftware.Core.Exception
 			this.m_args = (TItsExceptionArgs)info.GetValue(c_args, typeof(TItsExceptionArgs))!;
 		}
 
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			info.AddValue(c_args, m_args);
-			base.GetObjectData(info, context);
-		}
+		//public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		//{
+		//	info.AddValue(c_args, m_args);
+		//	base.GetObjectData(info, context);
+		//}
 
 		public override string Message
 		{
