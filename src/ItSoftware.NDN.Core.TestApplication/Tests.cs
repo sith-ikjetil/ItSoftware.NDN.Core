@@ -120,10 +120,11 @@ namespace ItSoftware.NDN.Core.TestApplication
 			log.LogDebug("Debug Title", "Debug text");
 			log.LogOther("Other Title", "Other text");
 
-			for (int i = 0; i < 40; i++)
+			for (int i = 0; i < 4; i++)
 			{
-				log.LogInformation("Hello, World!", "Hello, World!");
-			}
+				log.LogInformation("Hello, World!", "Hello, World!", "World, Hello!");
+                log.LogDebug("Hello, World!", "Hello, World!", "World, Hello!");
+            }
 
 			Console.WriteLine(log.ToString());
 

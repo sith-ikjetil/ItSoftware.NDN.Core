@@ -412,11 +412,22 @@ namespace ItSoftware.Core.Log
 			StringBuilder txt = new StringBuilder();
 			lock (this._lock)
 			{
-				foreach (var i in this.Entries)
-				{
-					txt.AppendLine($"{Enum.GetName(typeof(ItsLogType), i.Type)} : {i.When.ToString("s")} : {i.Title.Replace(":", ",")} : {i.Text.Replace(":", ",")}");
-				}
-			}
+                txt.AppendLine($"## ITSLOG ##");
+                txt.AppendLine($"## Filename: {this.FileName}");
+                txt.AppendLine($"============================");
+                foreach (var i in this.Entries)
+                {
+                    txt.AppendLine($"Type    : {Enum.GetName(typeof(ItsLogType), i.Type)}");
+                    txt.AppendLine($"When    : {i.When.ToString("s")}");
+                    txt.AppendLine($"Title   : {i.Title.Replace(":", ",")}");
+                    txt.AppendLine($"Text    :");
+                    txt.AppendLine($"{i.Text.Replace(":", ",")}");
+                    txt.AppendLine($"Details :");
+                    txt.AppendLine($"{i.Details.Replace(":", ",")}");
+                    txt.AppendLine();
+                    txt.AppendLine();
+                }
+            }
 			return txt.ToString();
 		}
 		#endregion
