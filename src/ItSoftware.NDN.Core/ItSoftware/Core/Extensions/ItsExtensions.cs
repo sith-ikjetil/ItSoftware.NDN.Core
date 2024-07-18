@@ -228,7 +228,7 @@ namespace ItSoftware.Core.Extensions
 
             yield break;
         }
-        public static IEnumerable<short> ItsToDouble(this IEnumerable<string> numbers, bool distinctOnly)
+        public static IEnumerable<short> ItsToShort(this IEnumerable<string> numbers, bool distinctOnly)
         {
             if (numbers == null || numbers.Count() == 0)
             {
