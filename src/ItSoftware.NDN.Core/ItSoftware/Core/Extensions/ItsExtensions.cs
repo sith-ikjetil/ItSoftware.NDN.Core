@@ -43,6 +43,37 @@ namespace ItSoftware.Core.Extensions
 		private static Random s_rnd = new Random();
 		#endregion
 
+		#region ItsWords
+		public static IEnumerable<string> ItsWords(this IEnumerable<string> lines, bool distinctOnly)
+		{
+			if (lines == null) {
+				yield break;
+			}
+
+			var ht = new Hashtable();
+
+			foreach (var line in lines) {
+				var matches = line.ItsRegExPatternMatches(@"\b(?<word>[\w]+)\b");
+				foreach ( Match match in matches) {
+					var word = match.Groups["word"]?.Value;
+					if (word == null) continue;
+					
+					if (distinctOnly && ht.ContainsKey(word)) {
+						continue;
+					}
+
+					if (distinctOnly) {
+						ht.Add(word, null);
+					}
+
+					yield return word;
+				}
+			}
+
+			yield break;
+		}
+		#endregion
+
 		#region ItsRenderException
 		/// <summary>
 		/// Formats an exception to string

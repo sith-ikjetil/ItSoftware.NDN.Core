@@ -8,6 +8,7 @@ using System.Diagnostics;
 using ItSoftware.Core.Extensions;
 using ItSoftware.Core.ID;
 using ItSoftware.Core.Log;
+using Azure.Core.GeoJson;
 //using ItSoftware.Core.HttpHost;
 namespace ItSoftware.NDN.Core.TestApplication
 {
@@ -36,6 +37,7 @@ namespace ItSoftware.NDN.Core.TestApplication
                 this.TestItsRenderExceptionShort();
                 this.TestItsHttpHost();
 				this.TestItsRandom();
+				this.TestItsWords();
 			}
 			catch (Exception y)
 			{
@@ -54,6 +56,19 @@ namespace ItSoftware.NDN.Core.TestApplication
 			Console.WriteLine();
 			Console.WriteLine($" {name} ".ItsWidthExpand(80, '_', ItsWidthExpandDirection.Middle));
 		}
+
+		private void TestItsWords()
+		{
+            PrintTestHeader("ItsWords Started");            
+			foreach (var word in System.IO.File.ReadLines("poem.txt").ItsWords(false))
+			{
+				Console.WriteLine($"'{word}'");
+			}
+
+			Console.WriteLine($"Count All: {System.IO.File.ReadLines("poem.txt").ItsWords(false).Count()}");
+            Console.WriteLine($"Count Distinct: {System.IO.File.ReadLines("poem.txt").ItsWords(true).Count()}");
+
+        }
 
 		private void TestItsStopwatchStart()
 		{

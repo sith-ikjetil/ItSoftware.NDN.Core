@@ -13,4 +13,10 @@
     <ProjectReference Include="..\ItSoftware.NDN.Core\ItSoftware.NDN.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="poem.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
