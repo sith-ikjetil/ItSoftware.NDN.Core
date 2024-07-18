@@ -38,9 +38,9 @@ namespace ItSoftware.NDN.Core.TestApplication
                 this.TestItsRenderExceptionShort();
                 this.TestItsHttpHost();
 				this.TestItsRandom();
-				this.TestItsWords();
-				this.TestItsNumbers();
-				this.TestItsAsNumbers();
+				this.TestItsToWords();
+				this.TestItsToNumbers();
+				this.TestItsToDouble();
 			}
 			catch (Exception y)
 			{
@@ -60,34 +60,34 @@ namespace ItSoftware.NDN.Core.TestApplication
 			Console.WriteLine($" {name} ".ItsWidthExpand(80, '_', ItsWidthExpandDirection.Middle));
 		}
 
-		private void TestItsWords()
+		private void TestItsToWords()
 		{
-            PrintTestHeader("ItsWords Started");            
-			foreach (var word in System.IO.File.ReadLines("poem.txt").ItsWords(false))
+            PrintTestHeader("ItsToWords Started");            
+			foreach (var word in System.IO.File.ReadLines("poem.txt").ItsToWords(false))
 			{
 				Console.WriteLine($"'{word}'");
 			}
 
-			Console.WriteLine($"Count All: {System.IO.File.ReadLines("poem.txt").ItsWords(false).Count()}");
-            Console.WriteLine($"Count Distinct: {System.IO.File.ReadLines("poem.txt").ItsWords(true).Count()}");
+			Console.WriteLine($"Count All: {System.IO.File.ReadLines("poem.txt").ItsToWords(false).Count()}");
+            Console.WriteLine($"Count Distinct: {System.IO.File.ReadLines("poem.txt").ItsToWords(true).Count()}");
 
         }
 
-        private void TestItsNumbers()
+        private void TestItsToNumbers()
         {
-            PrintTestHeader("ItsNumbers Started");
+            PrintTestHeader("ItsToNumbers Started");
 			var lines = "ABC 0130, DEF 2010.\n2000 1920.20191 XYZ!";
-			foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsNumbers(false))
+			foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsToNumbers(false))
             {
                 Console.WriteLine($"'{n}'");
             }
         }
 
-        private void TestItsAsNumbers()
+        private void TestItsToDouble()
         {
-            PrintTestHeader("ItsAsNumbers Started");
+            PrintTestHeader("ItsToDouble Started");
             var lines = "ABC 0130, DEF 2010.\n2000 1920.20191 0130 XYZ!";
-            foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsNumbers(false).ItsAsNumbers(false, new System.Globalization.CultureInfo("en-US")))
+            foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsToNumbers(false).ItsToDouble(false, new System.Globalization.CultureInfo("en-US")))
             {
 				Console.WriteLine(n.ToString(new CultureInfo("en-US")));
             }
