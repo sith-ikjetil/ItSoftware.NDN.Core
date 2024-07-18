@@ -74,7 +74,7 @@ namespace ItSoftware.NDN.Core.TestApplication
         private void TestItsNumbers()
         {
             PrintTestHeader("ItsNumbers Started");
-			var lines = "ABC 0130 DEF 2010. \n2000 1920.20191 XYZ!";
+			var lines = "ABC 0130, DEF 2010.\n2000 1920.20191 XYZ!";
 			foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsNumbers(false))
             {
                 Console.WriteLine($"'{n}'");
