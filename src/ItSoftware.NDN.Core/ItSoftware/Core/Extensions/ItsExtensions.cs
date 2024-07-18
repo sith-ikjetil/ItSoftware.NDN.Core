@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Collections.Immutable;
 
 namespace ItSoftware.Core.Extensions
 {
@@ -72,15 +73,51 @@ namespace ItSoftware.Core.Extensions
 
 			yield break;
 		}
-		#endregion
+        #endregion
 
-		#region ItsRenderException
-		/// <summary>
-		/// Formats an exception to string
-		/// </summary>
-		/// <param name="exception"></param>
-		/// <returns></returns>
-		public static string ItsRenderException(this System.Exception exception)
+        #region ItsNumbers
+		public static IEnumerable<string> ItsNumbers(this IEnumerable<string> lines, bool distinctOnly)
+        {
+            if (lines == null)
+            {
+                yield break;
+            }
+
+            var ht = new Hashtable();
+
+            foreach (var line in lines)
+            {
+                var matches = line.ItsRegExPatternMatches(@"\b(?<word>[0-9.,]+)\b");
+                foreach (Match match in matches)
+                {
+                    var word = match.Groups["word"]?.Value;
+                    if (word == null) continue;
+
+                    if (distinctOnly && ht.ContainsKey(word))
+                    {
+                        continue;
+                    }
+
+                    if (distinctOnly)
+                    {
+                        ht.Add(word, null);
+                    }
+
+                    yield return word;
+                }
+            }
+
+            yield break;
+        }
+        #endregion
+
+        #region ItsRenderException
+        /// <summary>
+        /// Formats an exception to string
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
+        public static string ItsRenderException(this System.Exception exception)
 		{
 			StringBuilder output = new StringBuilder();
 			output.AppendLine();
@@ -1059,7 +1096,7 @@ namespace ItSoftware.Core.Extensions
 		#region ItsRandom
 		public static T ItsRandom<T>(this ICollection<T> list)
         {
-			if ( list == null )
+			if ( list == null || list.Count == 0)
             {
 				return default(T)!;
             }
@@ -1071,6 +1108,20 @@ namespace ItSoftware.Core.Extensions
 			
 			return list.ElementAt(s_rnd.Next(0, list.Count));
         }
+		public static T ItsRandom<T>(this ImmutableArray<T> list)
+		{
+			if (list == null || list.Count() == 0)
+			{
+				return default(T)!;
+			}
+
+			if (list.Count() == 1)
+			{
+				return list.ElementAt<T>(0);
+			}
+
+			return list.ElementAt(s_rnd.Next(0, list.Count()));
+		}
 		#endregion
 
 		#region ItsNormalizeFileName

@@ -38,6 +38,7 @@ namespace ItSoftware.NDN.Core.TestApplication
                 this.TestItsHttpHost();
 				this.TestItsRandom();
 				this.TestItsWords();
+				this.TestItsNumbers();
 			}
 			catch (Exception y)
 			{
@@ -70,7 +71,17 @@ namespace ItSoftware.NDN.Core.TestApplication
 
         }
 
-		private void TestItsStopwatchStart()
+        private void TestItsNumbers()
+        {
+            PrintTestHeader("ItsNumbers Started");
+			var lines = "ABC 0130 DEF 2010. \n2000 1920.20191 XYZ!";
+			foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsNumbers(false))
+            {
+                Console.WriteLine($"'{n}'");
+            }
+        }
+
+        private void TestItsStopwatchStart()
 		{
 			PrintTestHeader("ItsStopwatch Started");
 			this.m_swatch.Start();
@@ -315,6 +326,21 @@ namespace ItSoftware.NDN.Core.TestApplication
             {
 				Console.WriteLine(list.ItsRandom());
             }
+
+			var ima = new string[10] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+			for (int i = 0; i < 10; i++)
+			{
+				var item = ima.ItsRandom<string>();
+
+				if (item != null)
+				{
+					Console.WriteLine(item);
+				}
+				else
+				{
+					Console.WriteLine("NULL");
+				}
+			}
         }
 	}
 }
