@@ -41,6 +41,7 @@ namespace ItSoftware.NDN.Core.TestApplication
 				this.TestItsToWords();
 				this.TestItsToNumbers();
 				this.TestItsToDouble();
+				this.TestItsToHexNumbers();
 			}
 			catch (Exception y)
 			{
@@ -90,6 +91,23 @@ namespace ItSoftware.NDN.Core.TestApplication
             foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsToNumbers(false).ItsToDouble(false, new System.Globalization.CultureInfo("en-US")))
             {
 				Console.WriteLine(n.ToString(new CultureInfo("en-US")));
+            }
+        }
+
+        private void TestItsToHexNumbers()
+        {
+            PrintTestHeader("ItsToHexNumbers Started");
+            var lines = "ABC 0130, DEF 2010.\n\n2000 1920.20191 0130 XYZ! af4b af5x";
+            foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsToHexNumbers(false))
+            {
+				try
+				{
+					Console.WriteLine($"'{n}'\t{Convert.ToInt32(n, 16)}");
+				}
+				catch (Exception e)
+				{
+                    Console.WriteLine($"'{n}'\tERROR: {e.GetType().FullName}, {e.Message}");                
+				}
             }
         }
 

@@ -109,10 +109,46 @@ namespace ItSoftware.Core.Extensions
 
             yield break;
         }
-		#endregion
+        #endregion
 
-		#region ItsTo(Double/Float/Int/Long/Decimal/Short/Byte)
-		public static IEnumerable<double> ItsToDouble(this IEnumerable<string> numbers, bool distinctOnly, CultureInfo ci)
+        #region ItsToHexNumbers
+        public static IEnumerable<string> ItsToHexNumbers(this IEnumerable<string> lines, bool distinctOnly)
+        {
+            if (lines == null || lines.Count() == 0)
+            {
+                yield break;
+            }
+
+            var ht = new Hashtable();
+
+            foreach (var line in lines)
+            {
+                var matches = line.ItsRegExPatternMatches(@"\b(?<word>[0-9ABCDEFabcdef]+)\b");
+                foreach (Match match in matches)
+                {
+                    var word = match.Groups["word"]?.Value;
+                    if (word == null) continue;
+
+                    if (distinctOnly && ht.ContainsKey(word))
+                    {
+                        continue;
+                    }
+
+                    if (distinctOnly)
+                    {
+                        ht.Add(word, null);
+                    }
+
+                    yield return word;
+                }
+            }
+
+            yield break;
+        }
+        #endregion
+
+        #region ItsTo(Double/Float/Int/Long/Decimal/Short/Byte)
+        public static IEnumerable<double> ItsToDouble(this IEnumerable<string> numbers, bool distinctOnly, CultureInfo ci)
 		{
             if (numbers == null || numbers.Count() == 0)
             {
@@ -136,7 +172,7 @@ namespace ItSoftware.Core.Extensions
                     }
 
                     yield return number;
-				}								
+				}						
             }
 
             yield break;
@@ -194,6 +230,35 @@ namespace ItSoftware.Core.Extensions
                     }
 
                     yield return number;
+                }                
+            }
+
+            yield break;
+        }
+        public static IEnumerable<int> ItsHexToInt(this IEnumerable<string> numbers, bool distinctOnly)
+        {
+            if (numbers == null || numbers.Count() == 0)
+            {
+                yield break;
+            }
+
+            var ht = new Hashtable();
+
+            foreach (var n in numbers)
+            {
+                if (int.TryParse(n, NumberStyles.HexNumber, null, out int number))
+                {
+                    if (distinctOnly && ht.ContainsKey(n))
+                    {
+                        continue;
+                    }
+
+                    if (distinctOnly)
+                    {
+                        ht.Add(n, null);
+                    }
+
+                    yield return number;
                 }
             }
 
@@ -211,6 +276,35 @@ namespace ItSoftware.Core.Extensions
             foreach (var n in numbers)
             {
                 if (long.TryParse(n, out long number))
+                {
+                    if (distinctOnly && ht.ContainsKey(n))
+                    {
+                        continue;
+                    }
+
+                    if (distinctOnly)
+                    {
+                        ht.Add(n, null);
+                    }
+
+                    yield return number;
+                }                
+            }
+
+            yield break;
+        }
+        public static IEnumerable<long> ItsHexToLong(this IEnumerable<string> numbers, bool distinctOnly)
+        {
+            if (numbers == null || numbers.Count() == 0)
+            {
+                yield break;
+            }
+
+            var ht = new Hashtable();
+
+            foreach (var n in numbers)
+            {
+                if (long.TryParse(n, NumberStyles.HexNumber, null, out long number))
                 {
                     if (distinctOnly && ht.ContainsKey(n))
                     {
@@ -252,6 +346,35 @@ namespace ItSoftware.Core.Extensions
                     }
 
                     yield return number;
+                }                
+            }
+
+            yield break;
+        }
+        public static IEnumerable<short> ItsHexToShort(this IEnumerable<string> numbers, bool distinctOnly)
+        {
+            if (numbers == null || numbers.Count() == 0)
+            {
+                yield break;
+            }
+
+            var ht = new Hashtable();
+
+            foreach (var n in numbers)
+            {
+                if (short.TryParse(n, NumberStyles.HexNumber, null, out short number))
+                {
+                    if (distinctOnly && ht.ContainsKey(n))
+                    {
+                        continue;
+                    }
+
+                    if (distinctOnly)
+                    {
+                        ht.Add(n, null);
+                    }
+
+                    yield return number;
                 }
             }
 
@@ -269,6 +392,35 @@ namespace ItSoftware.Core.Extensions
             foreach (var n in numbers)
             {
                 if (byte.TryParse(n, out byte number))
+                {
+                    if (distinctOnly && ht.ContainsKey(n))
+                    {
+                        continue;
+                    }
+
+                    if (distinctOnly)
+                    {
+                        ht.Add(n, null);
+                    }
+
+                    yield return number;
+                }                
+            }
+
+            yield break;
+        }
+        public static IEnumerable<byte> ItsHexToByte(this IEnumerable<string> numbers, bool distinctOnly)
+        {
+            if (numbers == null || numbers.Count() == 0)
+            {
+                yield break;
+            }
+
+            var ht = new Hashtable();
+
+            foreach (var n in numbers)
+            {
+                if (byte.TryParse(n, NumberStyles.HexNumber, null, out byte number))
                 {
                     if (distinctOnly && ht.ContainsKey(n))
                     {
