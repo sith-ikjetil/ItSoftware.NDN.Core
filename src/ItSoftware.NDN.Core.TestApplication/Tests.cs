@@ -19,7 +19,9 @@ namespace ItSoftware.NDN.Core.TestApplication
 
 		public void RunTests()
 		{
-			Console.WriteLine("> Test Application - Started <");
+            Console.OutputEncoding = Encoding.UTF8;
+
+            Console.WriteLine("> Test Application - Started <");
 
 			this.TestItsStopwatchStart();
 
@@ -71,7 +73,6 @@ namespace ItSoftware.NDN.Core.TestApplication
 
 			Console.WriteLine($"Count All: {System.IO.File.ReadLines("poem.txt").ItsToWords(false).Count()}");
             Console.WriteLine($"Count Distinct: {System.IO.File.ReadLines("poem.txt").ItsToWords(true).Count()}");
-
         }
 
         private void TestItsToNumbers()
