@@ -43,7 +43,13 @@ namespace ItSoftware.NDN.Core.TestApplication
 				this.TestItsToWords();
 				this.TestItsToNumbers();
 				this.TestItsToDouble();
-				this.TestItsToHexNumbers();
+                this.TestItsToInt();
+                this.TestItsToLong();
+                this.TestItsToFloat();
+                this.TestItsToShort();
+                this.TestItsToByte();
+                this.TestItsToDecimal();
+                this.TestItsToHexNumbers();
 				this.TestItsToSentences();
 			}
 			catch (Exception y)
@@ -61,7 +67,7 @@ namespace ItSoftware.NDN.Core.TestApplication
 		private void PrintTestHeader(string name)
 		{
 			Console.WriteLine();
-			Console.WriteLine($" {name} ".ItsWidthExpand(80, '_', ItsWidthExpandDirection.Middle));
+			Console.WriteLine($" {name} ".ItsWidthExpand(80, '#', ItsWidthExpandDirection.Middle));
 		}
 
 		private void TestItsToWords()
@@ -96,6 +102,66 @@ namespace ItSoftware.NDN.Core.TestApplication
             }
         }
 
+        private void TestItsToInt()
+		{
+            PrintTestHeader("ItsToInt Started");
+            var lines = "ABC 0130, DEF 2010.\n2000 1920.20191 0130 XYZ!";
+            foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsToNumbers(false).ItsToInt(false))
+            {
+                Console.WriteLine(n.ToString());
+            }
+        }
+
+        private void TestItsToLong()
+		{
+            PrintTestHeader("ItsToLong Started");
+            var lines = "ABC 0130, DEF 2010.\n2000 1920.20191 0130 XYZ!";
+            foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsToNumbers(false).ItsToLong(false))
+            {
+                Console.WriteLine(n.ToString());
+            }
+        }
+
+        private void TestItsToFloat()
+		{
+            PrintTestHeader("ItsToFloat Started");
+            var lines = "ABC 0130, DEF 2010.\n2000 1920.20191 0130 XYZ!";
+            foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsToNumbers(false).ItsToFloat(false, new System.Globalization.CultureInfo("en-US")))
+            {
+                Console.WriteLine(n.ToString(new CultureInfo("en-US")));
+            }
+        }
+
+        private void TestItsToShort()
+		{
+            PrintTestHeader("ItsToShort Started");
+            var lines = "ABC 0130, DEF 2010.\n2000 1920.20191 0130 XYZ!";
+            foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsToNumbers(false).ItsToShort(false))
+            {
+                Console.WriteLine(n.ToString(new CultureInfo("en-US")));
+            }
+        }
+
+        private void TestItsToByte()
+		{
+            PrintTestHeader("ItsToByte Started");
+            var lines = "ABC 0130, FF 2010.\n2000 1920.20191 1C XYZ!";
+            foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsToHexNumbers(false).ItsToByte(false))
+            {
+                Console.WriteLine(n.ToString());
+            }
+        }
+
+        private void TestItsToDecimal()
+		{
+            PrintTestHeader("ItsToDecimal Started");
+            var lines = "ABC 0130, DEF 2010.\n2000 1920.20191 0130 XYZ!";
+            foreach (var n in lines.Split("\n").AsEnumerable<string>().ItsToNumbers(false).ItsToDecimal(false, new System.Globalization.CultureInfo("en-US")))
+            {
+                Console.WriteLine(n.ToString(new CultureInfo("en-US")));
+            }
+        }
+
         private void TestItsToHexNumbers()
         {
             PrintTestHeader("ItsToHexNumbers Started");
@@ -115,12 +181,14 @@ namespace ItSoftware.NDN.Core.TestApplication
         private void TestItsToSentences()
 		{
             PrintTestHeader("ItsToSentences Started");
+			long lCount = 0;
             foreach (var sent in System.IO.File.ReadLines("poem.txt").ItsToSentences())
             {
                 Console.WriteLine($"'{sent}'");
+				lCount++;
             }
 
-            Console.WriteLine($"Count All: {System.IO.File.ReadLines("poem.txt").ItsToSentences().Count()}");
+            Console.WriteLine($"Count All: {lCount}");
         }
 
         private void TestItsStopwatchStart()
