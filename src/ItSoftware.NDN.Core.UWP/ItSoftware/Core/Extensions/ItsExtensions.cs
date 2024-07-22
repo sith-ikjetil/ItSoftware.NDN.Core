@@ -474,6 +474,76 @@ namespace ItSoftware.Core.Extensions
         }
         #endregion
 
+        #region ItsToSentences
+        public static IEnumerable<string> ItsToSentences(this IEnumerable<string> lines)
+        {
+            if (lines == null || lines.Count() == 0)
+            {
+                yield break;
+            }
+
+            var sentence = new StringBuilder();
+            foreach (var line in lines)
+            {
+                var linex = sentence.ToString();
+                if (linex.Length > 0 && linex[linex.Length - 1] != ' ')
+                {
+                    linex = linex + " ";
+                }
+                linex = linex + line;
+
+                var idx1 = linex.IndexOf(".");
+                var idx2 = linex.IndexOf("!");
+                var idx3 = linex.IndexOf("?");
+
+                var indexes = new List<int>() { idx1, idx2, idx3 };
+                indexes.RemoveAll(i => i == -1);
+                indexes.Sort();
+
+                var lastIdx = 0;
+                foreach (var idx in indexes)
+                {
+                    var substr = linex.Substring(lastIdx, idx + 1 - lastIdx);
+                    lastIdx = idx + 1;
+                    yield return substr.Trim();
+                }
+
+                if (indexes.Count() > 0)
+                {
+                    if (line.Length > indexes.Last())
+                    {
+                        sentence.Clear();
+                        if (sentence.Length > 0 && sentence[sentence.Length - 1] != ' ')
+                        {
+                            sentence.Append($" {linex.Substring(lastIdx, indexes.Last() + 1 - lastIdx)}");
+                        }
+                        else
+                        {
+                            sentence.Append(linex.Substring(lastIdx));
+                        }
+                    }
+                    else
+                    {
+                        sentence.Clear();
+                    }
+                }
+                else
+                {
+                    if (sentence.Length > 0 && sentence[sentence.Length - 1] != ' ')
+                    {
+                        sentence.Append($" {line}");
+                    }
+                    else
+                    {
+                        sentence.Append(line);
+                    }
+                }
+            }
+
+            yield break;
+        }
+        #endregion
+
         #region ItsRenderException
         /// <summary>
         /// Formats an exception to string
