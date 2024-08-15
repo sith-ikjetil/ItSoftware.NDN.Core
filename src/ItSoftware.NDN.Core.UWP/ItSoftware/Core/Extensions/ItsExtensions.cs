@@ -697,168 +697,48 @@ namespace ItSoftware.Core.Extensions
         /// <returns></returns>
         public static ItsApplyTagTemplateResult ItsApplyTagTemplate(this string source, string tagTemplate, string preTag, string postTag)
         {
-            if (string.IsNullOrEmpty(source) || string.IsNullOrWhiteSpace(source))
+            var result = new ItsApplyTagTemplateResult();
+            var tagDictionary = new Dictionary<string, List<string>>();
+
+            // Identify all the placeholders (e.g., <tag1>) in the tagTemplate
+            var tagPlaceholders = new List<string>();
+            string placeholderPattern = Regex.Escape(preTag) + "(.*?)" + Regex.Escape(postTag);
+            var placeholderMatches = Regex.Matches(tagTemplate, placeholderPattern);
+
+            foreach (Match match in placeholderMatches)
             {
-                throw new ArgumentException("source");
-            }
-            if (string.IsNullOrEmpty(tagTemplate) || string.IsNullOrWhiteSpace(tagTemplate))
-            {
-                throw new ArgumentException("tagTemplate");
-            }
-            if (string.IsNullOrEmpty(preTag) || string.IsNullOrWhiteSpace(preTag))
-            {
-                throw new ArgumentException("preTag");
-            }
-            if (string.IsNullOrEmpty(postTag) || string.IsNullOrWhiteSpace(postTag))
-            {
-                throw new ArgumentException("postTag");
+                tagPlaceholders.Add(match.Groups[1].Value);
             }
 
-            List<string> listTags = new List<string>(); // {{tag}}
-            List<string> listtagTemplate = new List<string>();
-            int indexPre = ItsFind(tagTemplate, preTag);
-            if (indexPre == -1)//|| indexPre == 0) // Cannot be 0 because we need a value before the first tag
-                return new ItsApplyTagTemplateResult();
-
-            if (indexPre != 0)
+            // Create a regex pattern to match the entire tagTemplate in the source
+            string tagPattern = Regex.Escape(tagTemplate);
+            foreach (var tagPlaceholder in tagPlaceholders)
             {
-                listtagTemplate.Add(tagTemplate.Substring(0, indexPre));//+1
-            }
-            else
-            {
-                listtagTemplate.Add(string.Empty);
+                tagPattern = tagPattern.Replace(Regex.Escape(preTag) + tagPlaceholder + Regex.Escape(postTag), "(.*?)");
             }
 
-            int indexPost = 0;
-            while (indexPre != -1)
-            {
-                indexPost = ItsFind(tagTemplate, postTag, indexPre + preTag.Length);
-                if (indexPost == -1)
-                    return new ItsApplyTagTemplateResult();
+            // Find all matches of the modified tagTemplate in the source
+            var matches = Regex.Matches(source, tagPattern);
 
-                listTags.Add(tagTemplate.Substring(indexPre + preTag.Length, indexPost - indexPre - preTag.Length));
-                indexPre = ItsFind(tagTemplate, preTag, indexPost + postTag.Length);
-                if (indexPre != -1)
+            foreach (Match match in matches)
+            {
+                for (int i = 0; i < tagPlaceholders.Count; i++)
                 {
-                    // We must have som values between the tags
-                    if (indexPre == indexPost + postTag.Length)
-                        return new ItsApplyTagTemplateResult();
+                    string fullTag = preTag + tagPlaceholders[i] + postTag;
 
-                    listtagTemplate.Add(tagTemplate.Substring(indexPost + postTag.Length, indexPre - indexPost - postTag.Length));
+                    if (!tagDictionary.ContainsKey(fullTag))
+                    {
+                        tagDictionary[fullTag] = new List<string>();
+                    }
+
+                    tagDictionary[fullTag].Add(match.Groups[i + 1].Value);
                 }
             }
 
-            if (tagTemplate.Length - indexPost - postTag.Length != 0)
-            {
-                listtagTemplate.Add(tagTemplate.Substring(indexPost + postTag.Length, tagTemplate.Length - indexPost - postTag.Length));
-            }
-            else
-            {
-                listtagTemplate.Add(string.Empty);
-            }
+            // Add the dictionary to the result list
+            result.Add(tagDictionary);
 
-            if (listtagTemplate.Count == 0 && listTags.Count > 1)
-            {
-                throw new ArgumentException("Invalid tag template");
-            }
-
-            if (listtagTemplate.Count == 2 && listTags.Count == 1 && listtagTemplate[0].Length == 0 && listtagTemplate[1].Length == 0)
-            {
-                var retVal = new ItsApplyTagTemplateResult();
-
-                List<string> listRetVal = new List<string>();
-                listRetVal.Add(source);
-
-                var dictRetVal = new Dictionary<string, List<string>>();
-                dictRetVal.Add(listTags[0], listRetVal);
-
-                retVal.Add(dictRetVal);
-
-                return retVal;
-            }
-
-            var listNameValueCollection = new ItsApplyTagTemplateResult();
-            int startIndex = 0;
-            do
-            {
-                bool IsAllFound = false;
-
-                int[] indextagTemplate = new int[listtagTemplate.Count];
-
-                indextagTemplate[0] = source.IndexOf(((string)listtagTemplate[0]), startIndex);
-                if (indextagTemplate[0] == -1)
-                    break;
-
-                for (int i = 1; i < listtagTemplate.Count; i++)
-                {
-                    int index = indextagTemplate[i - 1] + ((string)listtagTemplate[i - 1]).Length;
-                    if (index >= source.Length)
-                    {
-                        // We are at end of source string so lets quit
-                        IsAllFound = true;  // Make sure we break out of it
-                        break;
-                    }
-
-                    // Check empty string (end of source then)
-                    if (listtagTemplate[i].Length == 0)
-                    {
-                        indextagTemplate[i] = source.Length;
-                    }
-                    else
-                    {
-                        indextagTemplate[i] = source.IndexOf(((string)listtagTemplate[i]), index);
-                        if (indextagTemplate[i] == -1)
-                        {
-                            IsAllFound = true;
-                            break;
-                        }
-                    }
-                }
-                if (IsAllFound)
-                    break;
-
-                startIndex = indextagTemplate[listtagTemplate.Count - 1] + ((string)listtagTemplate[listtagTemplate.Count - 1]).Length;
-
-                // Now extract values				
-                var nvc = new Dictionary<string, List<string>>();
-                for (int j = 0; j < listTags.Count; j++)
-                {
-
-                    int length = length = indextagTemplate[j + 1] - indextagTemplate[j] - ((string)listtagTemplate[j]).Length;
-                    int index = indextagTemplate[j] + ((string)listtagTemplate[j]).Length;
-                    if (length < 0)
-                        break;
-
-                    string tagValue = source.Substring(index, length);
-                    if (nvc.ContainsKey(listTags[j].ToString()))
-                    {
-                        var list = nvc[listTags[j]];
-                        list.Add(tagValue);
-                    }
-                    else
-                    {
-                        nvc.Add(listTags[j].ToString(), new List<string>() { tagValue });
-                    }
-
-                    //string tagValue = source.Substring(startIndex, source.Length-startIndex );
-                    //if (nvc.ContainsKey(listTags[j].ToString()))
-                    //{
-                    //    var list = nvc[listTags[j]];
-                    //    list.Add(tagValue);
-                    //}
-                    //else
-                    //{
-                    //    nvc.Add(listTags[j].ToString(), new List<string>() { tagValue });
-                    //}
-
-                    //startIndex = source.Length;
-
-                }
-                listNameValueCollection.Add(nvc);
-
-            } while (startIndex < source.Length);
-
-            return listNameValueCollection;
+            return result;
         }
 
         /// <summary>

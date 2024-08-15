@@ -51,6 +51,7 @@ namespace ItSoftware.NDN.Core.TestApplication
                 this.TestItsToDecimal();
                 this.TestItsToHexNumbers();
 				this.TestItsToSentences();
+				this.TestItsApplyTagTemplate();
 			}
 			catch (Exception y)
 			{
@@ -452,5 +453,30 @@ namespace ItSoftware.NDN.Core.TestApplication
 				}
 			}
         }
-	}
+
+        private void TestItsApplyTagTemplate()
+        {
+            PrintTestHeader("ItsApplyTagTemplate");
+
+			var source = "test\n<div><a href=\"http://www.itsoftware.no/images/img.png\">picture name</a></div>\ntest<a href=\"http://www.images.com/i.gif\">second name</a>\ntest";
+			var tagTemplate = "href=\"{{url}}\">{{name}}</";
+			var preTag = "{{";
+			var postTag = "}}";
+			
+			var result = source.ItsApplyTagTemplate(tagTemplate, preTag, postTag);
+			foreach (var r in result)
+			{
+				foreach (var k in r.Keys)
+				{
+                    Console.WriteLine($"##{k}##");
+					foreach (var v in r[k])
+					{
+						Console.WriteLine(v);
+					}
+                }				
+			}
+        }
+    }
 }
+
+
