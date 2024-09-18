@@ -1,5 +1,7 @@
 using ItSoftware.Core.Extensions;
+using ItSoftware.Core.Log;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace ItSoftware.NDN.Core.MSTest
 {
@@ -213,6 +215,52 @@ namespace ItSoftware.NDN.Core.MSTest
             var value = "C:\\\n??||__%&\rvc";
             var expected = "C:\\_??____%&_vc";
             Assert.AreEqual(expected, value.ItsNormalizeDirectoryName());
+        }
+
+        [TestMethod]
+        public void TestItsRegularExpressions()
+        {
+            var value1 = "a\r\naaKJETIL KRISTOFFER SOLBERGbbba\r\naaYES MANbbb";
+            var expression = "a(\\s*)aa(?<bingo>[\\w ]+)bbb";
+            var expected1 = new string[] { "KJETIL KRISTOFFER SOLBERG", "YES MAN" };
+            var result1 = value1.ItsRegExPatternMatches(expression);
+            Assert.AreEqual(expected1.Length, result1.Count);
+
+            for (int i = 0; i < result1.Count; i++)
+            {
+                Assert.AreEqual(expected1[i], result1[i].Groups["bingo"].Value);
+            }            
+        }
+
+        [TestMethod]
+        public void TestItsLog()
+        {
+            var filename = Path.Combine(Path.GetTempPath(), "log-test.xml");
+            var log = new ItsLog(filename, "test.log", false);
+
+            log.LogWarning("Title", "This is a warning message");
+            log.LogError("Title", "This is an error message");
+            log.SaveLog();
+
+            Assert.IsTrue(System.IO.File.Exists(filename));
+            Assert.AreEqual(2, log.Entries.Count);
+        }
+        
+        [TestMethod]
+        public void TestItsRandom()
+        {            
+            var value1 = new List<string>() { "Anne", "Beta", "Bob", "Charlie", "Isabel", "John" };
+
+            for (int i = 0; i < 20; i++)
+            {                
+                Assert.IsTrue(value1.Contains(value1.ItsRandom<string>()));
+            }
+
+            var value2 = new string[10] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J" };
+            for (int i = 0; i < 20; i++)
+            {
+                Assert.IsTrue(value2.Contains(value2.ItsRandom<string>()));
+            }
         }
     }
 }

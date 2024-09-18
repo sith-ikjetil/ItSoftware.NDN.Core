@@ -13,6 +13,10 @@ using System.Globalization;
 //using ItSoftware.Core.HttpHost;
 namespace ItSoftware.NDN.Core.TestApplication
 {
+	//
+	// This test class is deprecated and future tests
+	// - should be written in Unit Test project ItSoftware.NDN.Core.MSTest.
+	//
 	internal class Tests
 	{
 		private Stopwatch m_swatch = new Stopwatch();
@@ -27,31 +31,31 @@ namespace ItSoftware.NDN.Core.TestApplication
 
 			try
 			{
-				this.TestNormalizeFileName();
-				this.TestItsRegularExpressions();
-				this.TestItsLog();
-				this.TestItsHash();
-				this.TestItsDataSizeString();
-				this.TestItsWidthExpand();
+				//this.TestNormalizeFileName();
+				//this.TestItsRegularExpressions();
+				//this.TestItsLog();
+				//this.TestItsHash();
+				//this.TestItsDataSizeString();
+				//this.TestItsWidthExpand();
 				this.TestItsDbClient();
-				this.TestItsID();
-				this.TestItsRenderTimeSpan();
+				//this.TestItsID();
+				//this.TestItsRenderTimeSpan();
 				this.TestItsRenderException();
                 this.TestItsRenderExceptionShort();
-                this.TestItsHttpHost();
-				this.TestItsRandom();
-				this.TestItsToWords();
-				this.TestItsToNumbers();
-				this.TestItsToDouble();
-                this.TestItsToInt();
-                this.TestItsToLong();
-                this.TestItsToFloat();
-                this.TestItsToShort();
-                this.TestItsToByte();
-                this.TestItsToDecimal();
-                this.TestItsToHexNumbers();
-				this.TestItsToSentences();
-				this.TestItsApplyTagTemplate();
+                //this.TestItsHttpHost();
+				//this.TestItsRandom();
+				//this.TestItsToWords();
+				//this.TestItsToNumbers();
+				//this.TestItsToDouble();
+                //this.TestItsToInt();
+                //this.TestItsToLong();
+                //this.TestItsToFloat();
+                //this.TestItsToShort();
+                //this.TestItsToByte();
+                //this.TestItsToDecimal();
+                //this.TestItsToHexNumbers();
+				//this.TestItsToSentences();
+				//this.TestItsApplyTagTemplate();
 			}
 			catch (Exception y)
 			{
