@@ -1,4 +1,5 @@
 using ItSoftware.Core.Extensions;
+using System.Text;
 
 namespace ItSoftware.NDN.Core.MSTest
 {
@@ -156,6 +157,62 @@ namespace ItSoftware.NDN.Core.MSTest
             
             Assert.AreEqual("15 years 172 days 18 hours 04:52", value.ItsRenderTimeSpan(false));
             Assert.AreEqual("15 years 172 days 18 hours 04:52.000", value.ItsRenderTimeSpan(true));
+        }
+
+        [TestMethod]
+        public void TestItsHashMD5()
+        {
+            var value = "__microphone__";
+            var expected = "d4cc3fb5dee589855dfacc14a7db13c0";
+            Assert.AreEqual(expected, value.ItsHashMD5(Encoding.UTF8));            
+        }
+
+        [TestMethod]
+        public void TestItsHashSHA1()
+        {
+            var value = "__microphone__";
+            var expected = "4e67e36d8cc9415b5b9742d7379fd1ad6ed47f5b";
+            Assert.AreEqual(expected, value.ItsHashSHA1(Encoding.UTF8));
+        }
+
+        [TestMethod]
+        public void TestItsHashSHA256()
+        {
+            var value = "__microphone__";
+            var expected = "3ed56a46376c9557defc15d8ca57d2882d83e5a407f50981b93aabba8e78791b";
+            Assert.AreEqual(expected, value.ItsHashSHA256(Encoding.UTF8));
+        }
+
+        [TestMethod]
+        public void TestItsHashSHA384()
+        {
+            var value = "__microphone__";
+            var expected = "46758c181e16c9df779006c0d1f2dcfa3e586ce13383d1f87d09e043d78a6e2c91b1c5b1507cd7f84c7f60c80f0c509d";
+            Assert.AreEqual(expected, value.ItsHashSHA384(Encoding.UTF8));
+        }
+
+        [TestMethod]
+        public void TestItsHashSHA512()
+        {
+            var value = "__microphone__";
+            var expected = "e507fd3eb7cb395562678f1c2a85f6c503b98bab3fbfca16e50921c39a647539fa038e6117474f9f96e949eb5622af97c2bde5dba1e03bc7286c5bb4e4bce9ba";
+            Assert.AreEqual(expected, value.ItsHashSHA512(Encoding.UTF8));
+        }
+
+        [TestMethod]
+        public void TestItsNormalizeFilename()
+        {
+            var value = "M_?:F\\ile|name._%&";
+            var expected = "M___F_ile_name._%&";
+            Assert.AreEqual(expected, value.ItsNormalizeFileName());
+        }
+
+        [TestMethod]
+        public void TestItsNormalizeDirectoryName()
+        {
+            var value = "C:\\\n??||__%&\rvc";
+            var expected = "C:\\_??____%&_vc";
+            Assert.AreEqual(expected, value.ItsNormalizeDirectoryName());
         }
     }
 }
