@@ -114,8 +114,13 @@ namespace ItSoftware.Core.Zip
             byte[] buffer = new byte[BUFFER_SIZE];
             if (fileStreamIn.Length <= BUFFER_SIZE)
             {
-                fileStreamIn.Read(buffer, 0, Convert.ToInt32(fileStreamIn.Length));
-                zipOutputStream.Write(buffer, 0, Convert.ToInt32(fileStreamIn.Length));
+                int totalRead = 0;
+                int totalToRead = Convert.ToInt32(fileStreamIn.Length);
+                while (totalRead < totalToRead)
+                {
+                    totalRead += fileStreamIn.Read(buffer, 0, (totalToRead-totalRead));
+                    zipOutputStream.Write(buffer, 0, totalRead);
+                }
             }
             else
             {
@@ -126,10 +131,14 @@ namespace ItSoftware.Core.Zip
                     {
                         remaining = fileStreamIn.Length - currentIndex;
                     }
-                    fileStreamIn.Read(buffer, 0, Convert.ToInt32(remaining));
-                    currentIndex += remaining;
 
-                    zipOutputStream.Write(buffer, 0, Convert.ToInt32(remaining));
+                    int bytesRead = fileStreamIn.Read(buffer, 0, Convert.ToInt32(remaining));
+                    if (bytesRead == 0)
+                    {
+                        break;
+                    }
+                    currentIndex += bytesRead;
+                    zipOutputStream.Write(buffer, 0, bytesRead);
                 } while (currentIndex < fileStreamIn.Length);
             }
             fileStreamIn.Close();
@@ -189,12 +198,17 @@ namespace ItSoftware.Core.Zip
                             long currentIndex = 0;
                             byte[] buffer = new byte[BUFFER_SIZE];
                             if (fileStreamIn.Length <= BUFFER_SIZE)
-                            {
-                                fileStreamIn.Read(buffer, 0, Convert.ToInt32(fileStreamIn.Length));
-                                zipOutputStream.Write(buffer, 0, Convert.ToInt32(fileStreamIn.Length));
+                            {                                
+                                int totalRead = 0;
+                                int totalToRead = Convert.ToInt32(fileStreamIn.Length);
+                                while (totalRead < totalToRead)
+                                {
+                                    totalRead += fileStreamIn.Read(buffer, 0, (totalToRead - totalRead));
+                                    zipOutputStream.Write(buffer, 0, totalRead);
+                                }
                             }
                             else
-                            {
+                            {                                
                                 do
                                 {
                                     long remaining = BUFFER_SIZE;
@@ -202,10 +216,14 @@ namespace ItSoftware.Core.Zip
                                     {
                                         remaining = fileStreamIn.Length - currentIndex;
                                     }
-                                    fileStreamIn.Read(buffer, 0, Convert.ToInt32(remaining));
-                                    currentIndex += remaining;
-
-                                    zipOutputStream.Write(buffer, 0, Convert.ToInt32(remaining));
+                                    
+                                    int bytesRead = fileStreamIn.Read(buffer, 0, Convert.ToInt32(remaining));
+                                    if (bytesRead == 0)
+                                    {
+                                        break;
+                                    }
+                                    currentIndex += bytesRead;
+                                    zipOutputStream.Write(buffer, 0, bytesRead);
                                 } while (currentIndex < fileStreamIn.Length);
                             }
                         }// using ( FileStream fileStreamIn = File.OpenRead( Path.Combine( directory, filename ) ...

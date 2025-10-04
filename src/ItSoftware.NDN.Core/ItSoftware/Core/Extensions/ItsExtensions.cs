@@ -23,7 +23,7 @@ namespace ItSoftware.Core.Extensions
 	/// <summary>
 	/// enum: ItsWidthExpandDirection
 	/// </summary>
-	public enum ItsWidthExpandDirection
+	public enum ItsWidthExpandAlignment
 	{
 		Left,
 		Middle,
@@ -878,7 +878,7 @@ namespace ItSoftware.Core.Extensions
 		#endregion
 
 		#region ItsWidthExpand
-		public static string ItsWidthExpand(this string source, int width, char fill, ItsWidthExpandDirection direction)
+		public static string ItsWidthExpand(this string source, int width, char fill, ItsWidthExpandAlignment direction)
 		{
 			if (source == null)
 			{
@@ -892,7 +892,7 @@ namespace ItSoftware.Core.Extensions
 
 			var result = new StringBuilder();
 
-			if (direction == ItsWidthExpandDirection.Left)
+			if (direction == ItsWidthExpandAlignment.Right)
 			{
 				for (int i = 0; i < (width - source.Length); i++)
 				{
@@ -900,7 +900,7 @@ namespace ItSoftware.Core.Extensions
 				}
 				result.Append(source);
 			}
-			else if (direction == ItsWidthExpandDirection.Middle)
+			else if (direction == ItsWidthExpandAlignment.Middle)
 			{
 				for (int i = 0; i < ((width - source.Length) / 2); i++)
 				{
@@ -914,7 +914,7 @@ namespace ItSoftware.Core.Extensions
 					result.Append(fill);
 				}
 			}
-			else if (direction == ItsWidthExpandDirection.Right)
+			else if (direction == ItsWidthExpandAlignment.Left)
 			{
 				result.Append(source);
 

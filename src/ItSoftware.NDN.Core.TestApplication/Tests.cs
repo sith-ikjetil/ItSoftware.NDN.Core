@@ -36,7 +36,7 @@ namespace ItSoftware.NDN.Core.TestApplication
 				//this.TestItsLog();
 				//this.TestItsHash();
 				//this.TestItsDataSizeString();
-				//this.TestItsWidthExpand();
+				this.TestItsWidthExpand();
 				this.TestItsDbClient();
 				//this.TestItsID();
 				//this.TestItsRenderTimeSpan();
@@ -72,7 +72,7 @@ namespace ItSoftware.NDN.Core.TestApplication
 		private void PrintTestHeader(string name)
 		{
 			Console.WriteLine();
-			Console.WriteLine($" {name} ".ItsWidthExpand(80, '#', ItsWidthExpandDirection.Middle));
+			Console.WriteLine($" {name} ".ItsWidthExpand(80, '#', ItsWidthExpandAlignment.Middle));
 		}
 
 		private void TestItsToWords()
@@ -317,9 +317,9 @@ namespace ItSoftware.NDN.Core.TestApplication
 			PrintTestHeader("ItsWidthExpand");
 
 			string target = "Kjetil";
-			Console.WriteLine(target.ItsWidthExpand(30, '_', ItsWidthExpandDirection.Left));
-			Console.WriteLine(target.ItsWidthExpand(30, '_', ItsWidthExpandDirection.Middle));
-			Console.WriteLine(target.ItsWidthExpand(30, '_', ItsWidthExpandDirection.Right));
+			Console.WriteLine(target.ItsWidthExpand(30, '*', ItsWidthExpandAlignment.Left));
+			Console.WriteLine(target.ItsWidthExpand(30, '_', ItsWidthExpandAlignment.Middle));
+			Console.WriteLine(target.ItsWidthExpand(30, '=', ItsWidthExpandAlignment.Right));
 
 			Console.WriteLine();
 		}

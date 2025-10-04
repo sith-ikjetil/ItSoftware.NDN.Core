@@ -12,14 +12,14 @@ namespace ItSoftware.NDN.Core.MSTest
         public void TestItsWidthExpand()
         {
             var value = "microphone";
-            var expectedLeft = "______microphone";
-            Assert.AreEqual(expectedLeft, value.ItsWidthExpand(expectedLeft.Length, '_', ItsWidthExpandDirection.Left));
+            var expectedLeft = "microphone******";
+            Assert.AreEqual(expectedLeft, value.ItsWidthExpand(expectedLeft.Length, '*', ItsWidthExpandAlignment.Left));
 
-            var expectedRight = "microphone______";
-            Assert.AreEqual(expectedRight, value.ItsWidthExpand(expectedRight.Length, '_', ItsWidthExpandDirection.Right));
+            var expectedRight = "______microphone";
+            Assert.AreEqual(expectedRight, value.ItsWidthExpand(expectedRight.Length, '_', ItsWidthExpandAlignment.Right));
 
-            var expectedMiddle = "___microphone___";
-            Assert.AreEqual(expectedMiddle, value.ItsWidthExpand(expectedMiddle.Length, '_', ItsWidthExpandDirection.Middle));
+            var expectedMiddle = "===microphone===";
+            Assert.AreEqual(expectedMiddle, value.ItsWidthExpand(expectedMiddle.Length, '=', ItsWidthExpandAlignment.Middle));
         }
 
         [TestMethod]
